@@ -267,51 +267,54 @@ GET  /version                 → API version info
 ```
 meta_glasses_reviews_rani_patel/
 │
-├── config/
-│   └── db.js                    # MongoDB connection setup
+├── backend/
+│   │
+│   ├── config/
+│   │   └── db.js
+│   │
+│   ├── models/
+│   │   ├── Review.model.js
+│   │   └── User.model.js
+│   │
+│   ├── controllers/
+│   │   ├── review.controller.js
+│   │   ├── auth.controller.js
+│   │   ├── stats.controller.js
+│   │   └── admin.controller.js
+│   │
+│   ├── services/
+│   │   ├── review.service.js
+│   │   ├── auth.service.js
+│   │   └── stats.service.js
+│   │
+│   ├── routes/
+│   │   ├── review.routes.js
+│   │   ├── auth.routes.js
+│   │   ├── jwt.routes.js
+│   │   ├── admin.routes.js
+│   │   ├── stats.routes.js
+│   │   └── search.routes.js
+│   │
+│   ├── middlewares/
+│   │   ├── auth.middleware.js
+│   │   ├── role.middleware.js
+│   │   ├── logger.middleware.js
+│   │   ├── rateLimit.middleware.js
+│   │   └── error.middleware.js
+│   │
+│   ├── utils/
+│   │   ├── apiResponse.js
+│   │   ├── pagination.js
+│   │   └── filterBuilder.js
+│   │
+│   ├── seed/
+│   │   └── seed.js
+│   │
+│   ├── .env.example
+│   ├── .gitignore
+│   ├── package.json
+│   └── server.js
 │
-├── models/
-│   ├── Review.model.js          # Review schema (main dataset)
-│   └── User.model.js            # Auth user schema
-│
-├── controllers/
-│   ├── review.controller.js     # Review request/response logic
-│   ├── auth.controller.js       # Login, register, JWT logic
-│   ├── stats.controller.js      # Aggregation-based statistics
-│   └── admin.controller.js      # Admin-only operations
-│
-├── services/
-│   ├── review.service.js        # Review business logic
-│   ├── auth.service.js          # Auth business logic
-│   └── stats.service.js         # Aggregation pipeline logic
-│
-├── routes/
-│   ├── review.routes.js         # /reviews endpoints
-│   ├── auth.routes.js           # /auth endpoints
-│   ├── jwt.routes.js            # /jwt protected endpoints
-│   ├── admin.routes.js          # /admin endpoints
-│   ├── stats.routes.js          # /stats endpoints
-│   └── search.routes.js         # /search endpoints
-│
-├── middlewares/
-│   ├── auth.middleware.js       # JWT verification
-│   ├── role.middleware.js       # Admin/User role check
-│   ├── logger.middleware.js     # Request logging
-│   ├── rateLimit.middleware.js  # Rate limiting config
-│   └── error.middleware.js      # Global error handler
-│
-├── utils/
-│   ├── apiResponse.js           # Standardized response format
-│   ├── pagination.js            # Reusable pagination utility
-│   └── filterBuilder.js         # Dynamic MongoDB filter builder
-│
-├── seed/
-│   └── seed.js                  # DB seeding from JSON dataset
-│
-├── .env.example                 # Sample environment variables
-├── .gitignore
-├── package.json
-├── server.js                    # Application entry point
 └── README.md
 ```
 
