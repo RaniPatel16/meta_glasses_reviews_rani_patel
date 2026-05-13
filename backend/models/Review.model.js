@@ -80,6 +80,5 @@ const ReviewSchema = new mongoose.Schema({
 
 // Indexing frequently searched fields for performance (Checklist item 15)
 ReviewSchema.index({ country: 1, rating: -1 });
-ReviewSchema.index({ reviewID: 1 });
 
 module.exports = mongoose.model('Review', ReviewSchema);
