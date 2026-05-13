@@ -4,6 +4,7 @@ const UserSchema = new mongoose.Schema({
   name: {
     type: String,
     required: [true, 'Please add a name'],
+    trim: true,
   },
   email: {
     type: String,
@@ -23,12 +24,16 @@ const UserSchema = new mongoose.Schema({
     type: String,
     required: [true, 'Please add a password'],
     minlength: 6,
-    select: false,
+    select: false, // Prevents password from being returned in API calls
   },
+  resetPasswordToken: String,
+  resetPasswordExpire: Date,
   createdAt: {
     type: Date,
     default: Date.now,
   },
+}, {
+  timestamps: true,
 });
 
 module.exports = mongoose.model('User', UserSchema);
