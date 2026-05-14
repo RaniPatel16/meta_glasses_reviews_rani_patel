@@ -19,9 +19,11 @@ app.get('/', (req, res) => {
 
 // Import Routes
 const reviewRouter = require('./routes/review.routes');
+const userRouter = require('./routes/user.routes');
 
 // Use Routes
 app.use('/api/v1/reviews', reviewRouter);
+app.use('/api/v1/users', userRouter);
 
 // Error Handling Middleware
 app.use((err, req, res, next) => {
