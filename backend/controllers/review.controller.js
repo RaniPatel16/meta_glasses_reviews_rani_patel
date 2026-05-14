@@ -81,10 +81,58 @@ const updateReviewRating = async (req, res) => {
   }
 };
 
+// @desc    Delete review
+const deleteReview = async (req, res) => {
+  try {
+    const review = await Review.findOneAndDelete({ reviewID: req.params.reviewID });
+    if (review) {
+      res.json({ message: 'Review removed' });
+    } else {
+      res.status(404).json({ message: 'Review not found' });
+    }
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+// @desc    Fetch all countries
+const getAllCountries = async (req, res) => {
+  try {
+    const countries = await Review.distinct('country');
+    res.json(countries);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+// @desc    Fetch ratings data
+const getAllRatings = async (req, res) => {
+  try {
+    const ratings = await Review.find({}, 'rating reviewID title');
+    res.json(ratings);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+// @desc    Fetch verified reviews
+const getVerifiedReviews = async (req, res) => {
+  try {
+    const reviews = await Review.find({ verifiedPurchase: true });
+    res.json(reviews);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
 module.exports = {
   getAllReviews,
   getReviewById,
   createReview,
   updateReview,
-  updateReviewRating
+  updateReviewRating,
+  deleteReview,
+  getAllCountries,
+  getAllRatings,
+  getVerifiedReviews
 };
