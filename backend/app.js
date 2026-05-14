@@ -17,6 +17,12 @@ app.get('/', (req, res) => {
   });
 });
 
+// Import Routes
+const reviewRouter = require('./routes/review.routes');
+
+// Use Routes
+app.use('/api/v1/reviews', reviewRouter);
+
 // Error Handling Middleware
 app.use((err, req, res, next) => {
   const statusCode = err.statusCode || 500;
