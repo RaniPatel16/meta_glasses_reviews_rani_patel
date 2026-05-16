@@ -9,7 +9,15 @@ const {
   deleteReview,
   getAllCountries,
   getAllRatings,
-  getVerifiedReviews
+  getVerifiedReviews,
+  getReviewsByCountry,
+  getReviewsByRating,
+  getReviewsByVerifiedStatus,
+  getReviewsByTitle,
+  getReviewsByDate,
+  getReviewsByHelpfulCount,
+  getReviewsByPositiveStatus,
+  getReviewsByCountryAndRating
 } = require('../controllers/review.controller');
 
 // Main routes for /api/v1/reviews
@@ -21,6 +29,16 @@ router.route('/')
 router.get('/countries', getAllCountries);
 router.get('/ratings', getAllRatings);
 router.get('/verified', getVerifiedReviews);
+
+// Route Parameters Filters
+router.get('/country/:country/reviews', getReviewsByCountry);
+router.get('/ratings/:rating', getReviewsByRating);
+router.get('/verified/:status', getReviewsByVerifiedStatus);
+router.get('/title/:title', getReviewsByTitle);
+router.get('/date/:date', getReviewsByDate);
+router.get('/helpful/:count', getReviewsByHelpfulCount);
+router.get('/positive/:status', getReviewsByPositiveStatus);
+router.get('/country/:country/rating/:rating', getReviewsByCountryAndRating);
 
 // Routes for specific reviews by ID
 router.route('/:reviewID')

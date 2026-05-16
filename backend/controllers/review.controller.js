@@ -125,6 +125,92 @@ const getVerifiedReviews = async (req, res) => {
   }
 };
 
+// @desc    Fetch reviews by country
+const getReviewsByCountry = async (req, res) => {
+  try {
+    const reviews = await Review.find({ country: req.params.country });
+    res.json(reviews);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+// @desc    Fetch reviews by rating
+const getReviewsByRating = async (req, res) => {
+  try {
+    const reviews = await Review.find({ rating: req.params.rating });
+    res.json(reviews);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+// @desc    Fetch verified/unverified reviews
+const getReviewsByVerifiedStatus = async (req, res) => {
+  try {
+    // Convert string 'true'/'false' to Boolean
+    const status = req.params.status === 'true';
+    const reviews = await Review.find({ verifiedPurchase: status });
+    res.json(reviews);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+// @desc    Fetch reviews by title
+const getReviewsByTitle = async (req, res) => {
+  try {
+    const reviews = await Review.find({ 
+      title: { $regex: req.params.title, $options: 'i' } 
+    });
+    res.json(reviews);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+// @desc    Fetch reviews by date
+const getReviewsByDate = async (req, res) => {
+  try {
+    const reviews = await Review.find({ date: new Date(req.params.date) });
+    res.json(reviews);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+// @desc    Fetch reviews by helpful count
+const getReviewsByHelpfulCount = async (req, res) => {
+  try {
+    const reviews = await Review.find({ helpful: req.params.count });
+    res.json(reviews);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+// @desc    Fetch positive/negative reviews
+const getReviewsByPositiveStatus = async (req, res) => {
+  try {
+    const status = req.params.status === 'true';
+    const reviews = await Review.find({ is_positive_review: status });
+    res.json(reviews);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+// @desc    Fetch country reviews by rating
+const getReviewsByCountryAndRating = async (req, res) => {
+  try {
+    const { country, rating } = req.params;
+    const reviews = await Review.find({ country: country, rating: rating });
+    res.json(reviews);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
 module.exports = {
   getAllReviews,
   getReviewById,
@@ -134,5 +220,13 @@ module.exports = {
   deleteReview,
   getAllCountries,
   getAllRatings,
-  getVerifiedReviews
+  getVerifiedReviews,
+  getReviewsByCountry,
+  getReviewsByRating,
+  getReviewsByVerifiedStatus,
+  getReviewsByTitle,
+  getReviewsByDate,
+  getReviewsByHelpfulCount,
+  getReviewsByPositiveStatus,
+  getReviewsByCountryAndRating
 };
