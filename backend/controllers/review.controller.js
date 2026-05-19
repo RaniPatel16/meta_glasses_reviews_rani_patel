@@ -10,6 +10,14 @@ const getAllReviews = async (req, res) => {
     // ==========================================
     if (req.query.rating) query.rating = req.query.rating;
     if (req.query.exactRating) query.rating = req.query.exactRating;
+    
+    // Rating Range
+    if (req.query.minRating || req.query.maxRating) {
+      if (typeof query.rating !== 'object') query.rating = {};
+      if (req.query.minRating) query.rating.$gte = parseInt(req.query.minRating);
+      if (req.query.maxRating) query.rating.$lte = parseInt(req.query.maxRating);
+    }
+
     if (req.query.country) query.country = req.query.country;
     if (req.query.name) query.name = req.query.name;
     
@@ -23,14 +31,31 @@ const getAllReviews = async (req, res) => {
     if (req.query.contains) {
       query.review = { $regex: req.query.contains, $options: 'i' };
     }
+    if (req.query.title) {
+      query.title = { $regex: req.query.title, $options: 'i' };
+    }
     
-    // Time-based queries (Year/Month)
+    // Presence Checks
+    if (req.query.hasImage) {
+      if (req.query.hasImage === 'true') query.reviewImage = { $exists: true, $ne: '' };
+      else query.reviewImage = { $in: [null, ''] };
+    }
+    
+    if (req.query.hasReviewText) {
+      if (req.query.hasReviewText === 'true') query.review = { $exists: true, $ne: '' };
+      else query.review = { $in: [null, ''] };
+    }
+    
+    // Time-based queries (Year/Month/Day)
     let exprAnd = [];
     if (req.query.year) {
       exprAnd.push({ $eq: [{ $year: '$date' }, parseInt(req.query.year)] });
     }
     if (req.query.month) {
       exprAnd.push({ $eq: [{ $month: '$date' }, parseInt(req.query.month)] });
+    }
+    if (req.query.day) {
+      exprAnd.push({ $eq: [{ $dayOfMonth: '$date' }, parseInt(req.query.day)] });
     }
     if (exprAnd.length > 0) {
       query.$expr = { $and: exprAnd };

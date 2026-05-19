@@ -48,6 +48,11 @@ const {
 // E.g., /api/v1/reviews?exactRating=5
 // E.g., /api/v1/reviews?year=2025
 // E.g., /api/v1/reviews?month=12
+// E.g., /api/v1/reviews?day=25
+// E.g., /api/v1/reviews?title=Great
+// E.g., /api/v1/reviews?minRating=3&maxRating=5
+// E.g., /api/v1/reviews?hasImage=true
+// E.g., /api/v1/reviews?hasReviewText=true
 // ==========================================
 // Main routes for /api/v1/reviews
 router.route('/')
