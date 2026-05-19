@@ -38,6 +38,11 @@ const {
 // E.g., /api/v1/reviews?verifiedPurchase=True
 // E.g., /api/v1/reviews?positive=1
 // E.g., /api/v1/reviews?minHelpful=100
+// E.g., /api/v1/reviews?maxHelpful=500
+// E.g., /api/v1/reviews?name=HebeZ&rating=4
+// E.g., /api/v1/reviews?country=USA&positive=1
+// E.g., /api/v1/reviews?sort=rating&order=desc
+// E.g., /api/v1/reviews?fields=name,rating,title
 // ==========================================
 // Main routes for /api/v1/reviews
 router.route('/')
