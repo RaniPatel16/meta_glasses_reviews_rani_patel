@@ -9,9 +9,33 @@ const getAllReviews = async (req, res) => {
     // QUERY PARAMETERS LOGIC
     // ==========================================
     if (req.query.rating) query.rating = req.query.rating;
+    if (req.query.exactRating) query.rating = req.query.exactRating;
     if (req.query.country) query.country = req.query.country;
     if (req.query.name) query.name = req.query.name;
     
+    // Text Search Options
+    if (req.query.search) {
+      query.$or = [
+        { title: { $regex: req.query.search, $options: 'i' } },
+        { review: { $regex: req.query.search, $options: 'i' } }
+      ];
+    }
+    if (req.query.contains) {
+      query.review = { $regex: req.query.contains, $options: 'i' };
+    }
+    
+    // Time-based queries (Year/Month)
+    let exprAnd = [];
+    if (req.query.year) {
+      exprAnd.push({ $eq: [{ $year: '$date' }, parseInt(req.query.year)] });
+    }
+    if (req.query.month) {
+      exprAnd.push({ $eq: [{ $month: '$date' }, parseInt(req.query.month)] });
+    }
+    if (exprAnd.length > 0) {
+      query.$expr = { $and: exprAnd };
+    }
+
     if (req.query.verifiedPurchase) {
       query.verifiedPurchase = req.query.verifiedPurchase === 'True' || req.query.verifiedPurchase === 'true';
     }

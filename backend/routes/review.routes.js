@@ -43,6 +43,11 @@ const {
 // E.g., /api/v1/reviews?country=USA&positive=1
 // E.g., /api/v1/reviews?sort=rating&order=desc
 // E.g., /api/v1/reviews?fields=name,rating,title
+// E.g., /api/v1/reviews?search=battery
+// E.g., /api/v1/reviews?contains=Meta
+// E.g., /api/v1/reviews?exactRating=5
+// E.g., /api/v1/reviews?year=2025
+// E.g., /api/v1/reviews?month=12
 // ==========================================
 // Main routes for /api/v1/reviews
 router.route('/')
