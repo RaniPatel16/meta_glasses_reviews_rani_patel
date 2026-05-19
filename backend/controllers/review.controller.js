@@ -10,6 +10,7 @@ const getAllReviews = async (req, res) => {
     // ==========================================
     if (req.query.rating) query.rating = req.query.rating;
     if (req.query.country) query.country = req.query.country;
+    if (req.query.name) query.name = req.query.name;
     
     if (req.query.verifiedPurchase) {
       query.verifiedPurchase = req.query.verifiedPurchase === 'True' || req.query.verifiedPurchase === 'true';
@@ -19,11 +20,31 @@ const getAllReviews = async (req, res) => {
       query.is_positive_review = req.query.positive === '1' || req.query.positive === 'true';
     }
     
-    if (req.query.minHelpful) {
-      query.helpful = { $gte: parseInt(req.query.minHelpful) };
+    // Helpfulness range
+    if (req.query.minHelpful || req.query.maxHelpful) {
+      query.helpful = {};
+      if (req.query.minHelpful) query.helpful.$gte = parseInt(req.query.minHelpful);
+      if (req.query.maxHelpful) query.helpful.$lte = parseInt(req.query.maxHelpful);
     }
 
-    const reviews = await Review.find(query);
+    // Build the Mongoose Query
+    let mongooseQuery = Review.find(query);
+
+    // Sorting Logic (?sort=rating&order=desc)
+    if (req.query.sort) {
+      const sortField = req.query.sort;
+      const sortOrder = req.query.order === 'desc' ? -1 : 1;
+      mongooseQuery = mongooseQuery.sort({ [sortField]: sortOrder });
+    }
+
+    // Selecting Fields (?fields=name,rating,title)
+    if (req.query.fields) {
+      const fields = req.query.fields.split(',').join(' ');
+      mongooseQuery = mongooseQuery.select(fields);
+    }
+
+    // Execute the final query
+    const reviews = await mongooseQuery;
     res.json(reviews);
   } catch (error) {
     res.status(500).json({ message: error.message });
