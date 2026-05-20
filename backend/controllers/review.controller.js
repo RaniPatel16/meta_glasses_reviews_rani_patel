@@ -10,27 +10,68 @@ const getAllReviews = async (req, res) => {
     // ==========================================
     if (req.query.rating) query.rating = req.query.rating;
     if (req.query.exactRating) query.rating = req.query.exactRating;
+    
+    // Rating Range
+    if (req.query.minRating || req.query.maxRating) {
+      if (typeof query.rating !== 'object') query.rating = {};
+      if (req.query.minRating) query.rating.$gte = parseInt(req.query.minRating);
+      if (req.query.maxRating) query.rating.$lte = parseInt(req.query.maxRating);
+    }
+
     if (req.query.country) query.country = req.query.country;
     if (req.query.name) query.name = req.query.name;
+    if (req.query.language) query.language = { $regex: req.query.language, $options: 'i' };
     
     // Text Search Options
-    if (req.query.search) {
+    if (req.query.search || req.query.keyword) {
+      const searchTerm = req.query.search || req.query.keyword;
       query.$or = [
-        { title: { $regex: req.query.search, $options: 'i' } },
-        { review: { $regex: req.query.search, $options: 'i' } }
+        { title: { $regex: searchTerm, $options: 'i' } },
+        { review: { $regex: searchTerm, $options: 'i' } }
       ];
     }
     if (req.query.contains) {
       query.review = { $regex: req.query.contains, $options: 'i' };
     }
+    if (req.query.reviewContains) {
+      query.review = { $regex: req.query.reviewContains, $options: 'i' };
+    }
+    if (req.query.title) {
+      query.title = { $regex: req.query.title, $options: 'i' };
+    }
+    if (req.query.titleContains) {
+      query.title = { $regex: req.query.titleContains, $options: 'i' };
+    }
     
-    // Time-based queries (Year/Month)
+    // Presence Checks
+    if (req.query.hasImage) {
+      if (req.query.hasImage === 'true') query.reviewImage = { $exists: true, $ne: '' };
+      else query.reviewImage = { $in: [null, ''] };
+    }
+    
+    if (req.query.hasReviewText) {
+      if (req.query.hasReviewText === 'true') query.review = { $exists: true, $ne: '' };
+      else query.review = { $in: [null, ''] };
+    }
+    
+    // Time-based queries (Year/Month/Day)
     let exprAnd = [];
     if (req.query.year) {
       exprAnd.push({ $eq: [{ $year: '$date' }, parseInt(req.query.year)] });
     }
     if (req.query.month) {
       exprAnd.push({ $eq: [{ $month: '$date' }, parseInt(req.query.month)] });
+    }
+    if (req.query.day) {
+      exprAnd.push({ $eq: [{ $dayOfMonth: '$date' }, parseInt(req.query.day)] });
+    }
+    if (req.query.date) {
+      const d = new Date(req.query.date);
+      if (!isNaN(d)) {
+        exprAnd.push({ $eq: [{ $year: '$date' }, d.getUTCFullYear()] });
+        exprAnd.push({ $eq: [{ $month: '$date' }, d.getUTCMonth() + 1] });
+        exprAnd.push({ $eq: [{ $dayOfMonth: '$date' }, d.getUTCDate()] });
+      }
     }
     if (exprAnd.length > 0) {
       query.$expr = { $and: exprAnd };
@@ -49,6 +90,13 @@ const getAllReviews = async (req, res) => {
       query.helpful = {};
       if (req.query.minHelpful) query.helpful.$gte = parseInt(req.query.minHelpful);
       if (req.query.maxHelpful) query.helpful.$lte = parseInt(req.query.maxHelpful);
+    }
+    
+    if (req.query.hasHelpful) {
+      if (req.query.hasHelpful === 'true') {
+        if (!query.helpful) query.helpful = {};
+        query.helpful.$gt = 0;
+      }
     }
 
     // Build the Mongoose Query
