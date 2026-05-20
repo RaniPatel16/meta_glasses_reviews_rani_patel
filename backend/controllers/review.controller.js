@@ -20,19 +20,27 @@ const getAllReviews = async (req, res) => {
 
     if (req.query.country) query.country = req.query.country;
     if (req.query.name) query.name = req.query.name;
+    if (req.query.language) query.language = { $regex: req.query.language, $options: 'i' };
     
     // Text Search Options
-    if (req.query.search) {
+    if (req.query.search || req.query.keyword) {
+      const searchTerm = req.query.search || req.query.keyword;
       query.$or = [
-        { title: { $regex: req.query.search, $options: 'i' } },
-        { review: { $regex: req.query.search, $options: 'i' } }
+        { title: { $regex: searchTerm, $options: 'i' } },
+        { review: { $regex: searchTerm, $options: 'i' } }
       ];
     }
     if (req.query.contains) {
       query.review = { $regex: req.query.contains, $options: 'i' };
     }
+    if (req.query.reviewContains) {
+      query.review = { $regex: req.query.reviewContains, $options: 'i' };
+    }
     if (req.query.title) {
       query.title = { $regex: req.query.title, $options: 'i' };
+    }
+    if (req.query.titleContains) {
+      query.title = { $regex: req.query.titleContains, $options: 'i' };
     }
     
     // Presence Checks
@@ -57,6 +65,14 @@ const getAllReviews = async (req, res) => {
     if (req.query.day) {
       exprAnd.push({ $eq: [{ $dayOfMonth: '$date' }, parseInt(req.query.day)] });
     }
+    if (req.query.date) {
+      const d = new Date(req.query.date);
+      if (!isNaN(d)) {
+        exprAnd.push({ $eq: [{ $year: '$date' }, d.getUTCFullYear()] });
+        exprAnd.push({ $eq: [{ $month: '$date' }, d.getUTCMonth() + 1] });
+        exprAnd.push({ $eq: [{ $dayOfMonth: '$date' }, d.getUTCDate()] });
+      }
+    }
     if (exprAnd.length > 0) {
       query.$expr = { $and: exprAnd };
     }
@@ -74,6 +90,13 @@ const getAllReviews = async (req, res) => {
       query.helpful = {};
       if (req.query.minHelpful) query.helpful.$gte = parseInt(req.query.minHelpful);
       if (req.query.maxHelpful) query.helpful.$lte = parseInt(req.query.maxHelpful);
+    }
+    
+    if (req.query.hasHelpful) {
+      if (req.query.hasHelpful === 'true') {
+        if (!query.helpful) query.helpful = {};
+        query.helpful.$gt = 0;
+      }
     }
 
     // Build the Mongoose Query
