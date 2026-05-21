@@ -30,7 +30,10 @@ const {
   getReviewsByImageStatus,
   getReviewsByDevice,
   getPositiveReviews,
-  getNegativeReviews
+  getNegativeReviews,
+  getLatestReviews,
+  getHelpfulReviews,
+  getReviewStats
 } = require('../controllers/review.controller');
 
 // ==========================================
@@ -70,7 +73,12 @@ router.get('/verified', getVerifiedReviews);
 router.get('/positive', getPositiveReviews);
 router.get('/negative', getNegativeReviews);
 
+// Latest and Helpful routes
+router.get('/latest', getLatestReviews);
+router.get('/helpful', getHelpfulReviews);
+
 // Statistics routes
+router.get('/stats/reviews', getReviewStats);
 router.get('/stats/country/:country', getCountryStats);
 
 // ==========================================
