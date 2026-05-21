@@ -58,6 +58,14 @@ const {
 // E.g., /api/v1/reviews?minRating=3&maxRating=5
 // E.g., /api/v1/reviews?hasImage=true
 // E.g., /api/v1/reviews?hasReviewText=true
+// 
+// COMBINED QUERIES (Pagination + Sorting + Filtering)
+// E.g., /api/v1/reviews?country=USA&page=1&limit=10&sort=-rating
+// E.g., /api/v1/reviews?rating=5&page=2&limit=5
+// E.g., /api/v1/reviews?positive=1&sort=helpful
+// E.g., /api/v1/reviews?verifiedPurchase=True&page=1&limit=20
+// E.g., /api/v1/reviews?keyword=AI&sort=-date
+// E.g., /api/v1/reviews?country=IND&rating=4&page=1&limit=10
 // ==========================================
 // Main routes for /api/v1/reviews
 router.route('/')
