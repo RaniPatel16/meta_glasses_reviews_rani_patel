@@ -580,12 +580,57 @@ const getReviewStats = async (req, res) => {
   }
 };
 
+// @desc    Search reviews by general keyword
+const searchReviews = async (req, res) => {
+  try {
+    const keyword = req.query.keyword || '';
+    const reviews = await Review.find({
+      $or: [
+        { title: { $regex: keyword, $options: 'i' } },
+        { review: { $regex: keyword, $options: 'i' } }
+      ]
+    });
+    res.json(reviews);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+// @desc    Search reviews by title keyword
+const searchReviewsByTitle = async (req, res) => {
+  try {
+    const keyword = req.query.keyword || '';
+    const reviews = await Review.find({
+      title: { $regex: keyword, $options: 'i' }
+    });
+    res.json(reviews);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+// @desc    Search reviews by user keyword
+const searchReviewsByUser = async (req, res) => {
+  try {
+    const keyword = req.query.keyword || '';
+    const reviews = await Review.find({
+      name: { $regex: keyword, $options: 'i' }
+    });
+    res.json(reviews);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
 module.exports = {
   getPositiveReviews,
   getNegativeReviews,
   getLatestReviews,
   getHelpfulReviews,
   getReviewStats,
+  searchReviews,
+  searchReviewsByTitle,
+  searchReviewsByUser,
   getAllReviews,
   getReviewById,
   createReview,
