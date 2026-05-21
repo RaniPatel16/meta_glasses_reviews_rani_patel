@@ -114,6 +114,14 @@ const getAllReviews = async (req, res) => {
       const fields = req.query.fields.split(',').join(' ');
       mongooseQuery = mongooseQuery.select(fields);
     }
+    
+    // Pagination Logic
+    if (req.query.page || req.query.limit) {
+      const page = parseInt(req.query.page, 10) || 1;
+      const limit = parseInt(req.query.limit, 10) || 10;
+      const startIndex = (page - 1) * limit;
+      mongooseQuery = mongooseQuery.skip(startIndex).limit(limit);
+    }
 
     // Execute the final query
     const reviews = await mongooseQuery;
@@ -468,7 +476,41 @@ const getReviewsByDevice = async (req, res) => {
   }
 };
 
+// @desc    Fetch paginated positive reviews
+const getPositiveReviews = async (req, res) => {
+  try {
+    const page = parseInt(req.query.page, 10) || 1;
+    const limit = parseInt(req.query.limit, 10) || 10;
+    const startIndex = (page - 1) * limit;
+
+    const reviews = await Review.find({ is_positive_review: true })
+      .skip(startIndex)
+      .limit(limit);
+    res.json(reviews);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+// @desc    Fetch paginated negative reviews
+const getNegativeReviews = async (req, res) => {
+  try {
+    const page = parseInt(req.query.page, 10) || 1;
+    const limit = parseInt(req.query.limit, 10) || 10;
+    const startIndex = (page - 1) * limit;
+
+    const reviews = await Review.find({ is_positive_review: false })
+      .skip(startIndex)
+      .limit(limit);
+    res.json(reviews);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
 module.exports = {
+  getPositiveReviews,
+  getNegativeReviews,
   getAllReviews,
   getReviewById,
   createReview,
