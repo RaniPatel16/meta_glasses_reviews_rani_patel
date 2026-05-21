@@ -220,6 +220,16 @@ const deleteReview = async (req, res) => {
 const getAllCountries = async (req, res) => {
   try {
     const countries = await Review.distinct('country');
+    
+    // Pagination Logic
+    if (req.query.page || req.query.limit) {
+      const page = parseInt(req.query.page, 10) || 1;
+      const limit = parseInt(req.query.limit, 10) || 5;
+      const startIndex = (page - 1) * limit;
+      const endIndex = page * limit;
+      return res.json(countries.slice(startIndex, endIndex));
+    }
+    
     res.json(countries);
   } catch (error) {
     res.status(500).json({ message: error.message });
@@ -508,9 +518,72 @@ const getNegativeReviews = async (req, res) => {
   }
 };
 
+// @desc    Fetch paginated latest reviews
+const getLatestReviews = async (req, res) => {
+  try {
+    const page = parseInt(req.query.page, 10) || 1;
+    const limit = parseInt(req.query.limit, 10) || 10;
+    const startIndex = (page - 1) * limit;
+
+    const reviews = await Review.find({})
+      .sort({ date: -1 })
+      .skip(startIndex)
+      .limit(limit);
+    res.json(reviews);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+// @desc    Fetch paginated helpful reviews
+const getHelpfulReviews = async (req, res) => {
+  try {
+    const page = parseInt(req.query.page, 10) || 1;
+    const limit = parseInt(req.query.limit, 10) || 20;
+    const startIndex = (page - 1) * limit;
+
+    const reviews = await Review.find({ helpful: { $gt: 0 } })
+      .sort({ helpful: -1 })
+      .skip(startIndex)
+      .limit(limit);
+    res.json(reviews);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+// @desc    Fetch paginated review statistics (grouped by title)
+const getReviewStats = async (req, res) => {
+  try {
+    const page = parseInt(req.query.page, 10) || 1;
+    const limit = parseInt(req.query.limit, 10) || 20;
+    const startIndex = (page - 1) * limit;
+
+    const stats = await Review.aggregate([
+      {
+        $group: {
+          _id: '$title',
+          totalReviews: { $sum: 1 },
+          averageRating: { $avg: '$rating' },
+          totalHelpful: { $sum: '$helpful' }
+        }
+      },
+      { $sort: { totalReviews: -1 } },
+      { $skip: startIndex },
+      { $limit: limit }
+    ]);
+    res.json(stats);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
 module.exports = {
   getPositiveReviews,
   getNegativeReviews,
+  getLatestReviews,
+  getHelpfulReviews,
+  getReviewStats,
   getAllReviews,
   getReviewById,
   createReview,
