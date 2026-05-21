@@ -28,7 +28,9 @@ const {
   getReviewsByProfile,
   getReviewLink,
   getReviewsByImageStatus,
-  getReviewsByDevice
+  getReviewsByDevice,
+  getPositiveReviews,
+  getNegativeReviews
 } = require('../controllers/review.controller');
 
 // ==========================================
@@ -63,6 +65,10 @@ router.route('/')
 router.get('/countries', getAllCountries);
 router.get('/ratings', getAllRatings);
 router.get('/verified', getVerifiedReviews);
+
+// Positive/Negative explicit routes
+router.get('/positive', getPositiveReviews);
+router.get('/negative', getNegativeReviews);
 
 // Statistics routes
 router.get('/stats/country/:country', getCountryStats);

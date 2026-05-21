@@ -3,7 +3,17 @@ const User = require('../models/user.model');
 // @desc    Fetch all users
 const getAllUsers = async (req, res) => {
   try {
-    const users = await User.find({});
+    let mongooseQuery = User.find({});
+    
+    // Pagination Logic
+    if (req.query.page || req.query.limit) {
+      const page = parseInt(req.query.page, 10) || 1;
+      const limit = parseInt(req.query.limit, 10) || 10;
+      const startIndex = (page - 1) * limit;
+      mongooseQuery = mongooseQuery.skip(startIndex).limit(limit);
+    }
+    
+    const users = await mongooseQuery;
     res.json(users);
   } catch (error) {
     res.status(500).json({ message: error.message });
