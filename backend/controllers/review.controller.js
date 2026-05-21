@@ -102,11 +102,13 @@ const getAllReviews = async (req, res) => {
     // Build the Mongoose Query
     let mongooseQuery = Review.find(query);
 
-    // Sorting Logic (?sort=rating&order=desc)
+    // Sorting Logic (e.g. ?sort=rating&order=desc or ?sort=-rating)
     if (req.query.sort) {
-      const sortField = req.query.sort;
-      const sortOrder = req.query.order === 'desc' ? -1 : 1;
-      mongooseQuery = mongooseQuery.sort({ [sortField]: sortOrder });
+      let sortBy = req.query.sort.split(',').join(' ');
+      if (req.query.order === 'desc' && !sortBy.includes('-')) {
+        sortBy = '-' + sortBy;
+      }
+      mongooseQuery = mongooseQuery.sort(sortBy);
     }
 
     // Selecting Fields (?fields=name,rating,title)
