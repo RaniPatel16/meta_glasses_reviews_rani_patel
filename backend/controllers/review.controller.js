@@ -159,6 +159,7 @@ const createReview = async (req, res) => {
     const review = await Review.create(req.body);
     res.status(201).json(review);
   } catch (error) {
+    // Handles Missing required fields via Mongoose ValidationError
     res.status(400).json({ message: error.message });
   }
 };
@@ -174,9 +175,11 @@ const updateReview = async (req, res) => {
     if (review) {
       res.json(review);
     } else {
+      // Handles Invalid/Missing review ID
       res.status(404).json({ message: 'Review not found' });
     }
   } catch (error) {
+    // Handles invalid update data via Mongoose validation
     res.status(400).json({ message: error.message });
   }
 };
@@ -211,6 +214,7 @@ const deleteReview = async (req, res) => {
     if (review) {
       res.json({ message: 'Review removed' });
     } else {
+      // Handles already deleted review scenario
       res.status(404).json({ message: 'Review not found' });
     }
   } catch (error) {
