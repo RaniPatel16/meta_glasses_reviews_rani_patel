@@ -20,10 +20,12 @@ app.get('/', (req, res) => {
 // Import Routes
 const reviewRouter = require('./routes/review.routes');
 const userRouter = require('./routes/user.routes');
+const authRouter = require('./routes/auth.routes');
 
 // Use Routes
 app.use('/api/v1/reviews', reviewRouter);
 app.use('/api/v1/users', userRouter);
+app.use('/api/v1', authRouter);
 
 // Error Handling Middleware
 app.use((err, req, res, next) => {
