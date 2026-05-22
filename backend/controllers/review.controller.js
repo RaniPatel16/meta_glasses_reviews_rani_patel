@@ -722,6 +722,95 @@ const getUserStatsAlias = async (req, res) => {
   }
 };
 
+// @desc    Fetch positive reviews statistics
+const getPositiveReviewsStats = async (req, res) => {
+  try {
+    const stats = await Review.aggregate([
+      { $match: { is_positive_review: true } },
+      {
+        $group: {
+          _id: null,
+          totalPositive: { $sum: 1 },
+          averageRating: { $avg: '$rating' }
+        }
+      }
+    ]);
+    res.json(stats.length > 0 ? stats[0] : { totalPositive: 0 });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+// @desc    Fetch negative reviews statistics
+const getNegativeReviewsStats = async (req, res) => {
+  try {
+    const stats = await Review.aggregate([
+      { $match: { is_positive_review: false } },
+      {
+        $group: {
+          _id: null,
+          totalNegative: { $sum: 1 },
+          averageRating: { $avg: '$rating' }
+        }
+      }
+    ]);
+    res.json(stats.length > 0 ? stats[0] : { totalNegative: 0 });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+// @desc    Fetch top reviewers
+const getTopReviewers = async (req, res) => {
+  try {
+    const limit = parseInt(req.query.limit, 10) || 5;
+    const topReviewers = await Review.aggregate([
+      {
+        $group: {
+          _id: '$name',
+          totalReviews: { $sum: 1 },
+          totalHelpful: { $sum: '$helpful' }
+        }
+      },
+      { $sort: { totalReviews: -1 } },
+      { $limit: limit }
+    ]);
+    res.json(topReviewers);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+// @desc    Fetch most helpful reviews
+const getMostHelpfulReviewsStats = async (req, res) => {
+  try {
+    const limit = parseInt(req.query.limit, 10) || 5;
+    const mostHelpful = await Review.find().sort({ helpful: -1 }).limit(limit);
+    res.json(mostHelpful);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+// @desc    Fetch verified purchase statistics
+const getVerifiedPurchasesStats = async (req, res) => {
+  try {
+    const stats = await Review.aggregate([
+      { $match: { verifiedPurchase: true } },
+      {
+        $group: {
+          _id: null,
+          totalVerified: { $sum: 1 },
+          averageRating: { $avg: '$rating' }
+        }
+      }
+    ]);
+    res.json(stats.length > 0 ? stats[0] : { totalVerified: 0 });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
 module.exports = {
   getPositiveReviews,
   getNegativeReviews,
@@ -738,6 +827,11 @@ module.exports = {
   getHighestRating,
   getLowestRating,
   getUserStatsAlias,
+  getPositiveReviewsStats,
+  getNegativeReviewsStats,
+  getTopReviewers,
+  getMostHelpfulReviewsStats,
+  getVerifiedPurchasesStats,
   getAllReviews,
   getReviewById,
   createReview,

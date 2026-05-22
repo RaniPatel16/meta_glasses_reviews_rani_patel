@@ -43,7 +43,12 @@ const {
   getAverageRating,
   getHighestRating,
   getLowestRating,
-  getUserStatsAlias
+  getUserStatsAlias,
+  getPositiveReviewsStats,
+  getNegativeReviewsStats,
+  getTopReviewers,
+  getMostHelpfulReviewsStats,
+  getVerifiedPurchasesStats
 } = require('../controllers/review.controller');
 
 // ==========================================
@@ -100,6 +105,11 @@ router.get('/stats/reviews', getReviewStats);
 router.get('/stats/average-rating', getAverageRating);
 router.get('/stats/highest-rating', getHighestRating);
 router.get('/stats/lowest-rating', getLowestRating);
+router.get('/stats/positive-reviews', getPositiveReviewsStats);
+router.get('/stats/negative-reviews', getNegativeReviewsStats);
+router.get('/stats/top-reviewers', getTopReviewers);
+router.get('/stats/most-helpful', getMostHelpfulReviewsStats);
+router.get('/stats/verified-purchases', getVerifiedPurchasesStats);
 router.get('/stats/country/:country', getCountryStats);
 router.get('/stats/user/:name', getUserStatsAlias);
 
