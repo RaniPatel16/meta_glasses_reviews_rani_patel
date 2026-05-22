@@ -580,12 +580,102 @@ const getReviewStats = async (req, res) => {
   }
 };
 
+// @desc    Search reviews by general keyword
+const searchReviews = async (req, res) => {
+  try {
+    const keyword = req.query.keyword || '';
+    const reviews = await Review.find({
+      $or: [
+        { title: { $regex: keyword, $options: 'i' } },
+        { review: { $regex: keyword, $options: 'i' } }
+      ]
+    });
+    res.json(reviews);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+// @desc    Search reviews by title keyword
+const searchReviewsByTitle = async (req, res) => {
+  try {
+    const keyword = req.query.keyword || '';
+    const reviews = await Review.find({
+      title: { $regex: keyword, $options: 'i' }
+    });
+    res.json(reviews);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+// @desc    Search reviews specifically by user keyword
+const searchReviewsByUser = async (req, res) => {
+  try {
+    const keyword = req.query.keyword || '';
+    const reviews = await Review.find({
+      name: { $regex: keyword, $options: 'i' }
+    });
+    res.json(reviews);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+// @desc    Search reviews by 'q' query
+const searchReviewsQ = async (req, res) => {
+  try {
+    const q = req.query.q || '';
+    const reviews = await Review.find({
+      $or: [
+        { title: { $regex: q, $options: 'i' } },
+        { review: { $regex: q, $options: 'i' } }
+      ]
+    });
+    res.json(reviews);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+// @desc    Search countries by 'q'
+const searchCountryQ = async (req, res) => {
+  try {
+    const q = req.query.q || '';
+    const reviews = await Review.find({
+      country: { $regex: q, $options: 'i' }
+    });
+    res.json(reviews);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+// @desc    Search users by 'q'
+const searchUsersQ = async (req, res) => {
+  try {
+    const q = req.query.q || '';
+    const reviews = await Review.find({
+      name: { $regex: q, $options: 'i' }
+    });
+    res.json(reviews);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
 module.exports = {
   getPositiveReviews,
   getNegativeReviews,
   getLatestReviews,
   getHelpfulReviews,
   getReviewStats,
+  searchReviews,
+  searchReviewsByTitle,
+  searchReviewsByUser,
+  searchReviewsQ,
+  searchCountryQ,
+  searchUsersQ,
   getAllReviews,
   getReviewById,
   createReview,
