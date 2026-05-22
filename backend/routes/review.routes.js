@@ -33,7 +33,13 @@ const {
   getNegativeReviews,
   getLatestReviews,
   getHelpfulReviews,
-  getReviewStats
+  getReviewStats,
+  searchReviews,
+  searchReviewsByTitle,
+  searchReviewsByUser,
+  searchReviewsQ,
+  searchCountryQ,
+  searchUsersQ
 } = require('../controllers/review.controller');
 
 // ==========================================
@@ -88,6 +94,16 @@ router.get('/helpful', getHelpfulReviews);
 // Statistics routes
 router.get('/stats/reviews', getReviewStats);
 router.get('/stats/country/:country', getCountryStats);
+
+// Explicit Search routes (keyword)
+router.get('/search', searchReviews);
+router.get('/search/title', searchReviewsByTitle);
+router.get('/search/user', searchReviewsByUser);
+
+// Explicit Search routes (q)
+router.get('/search/reviews', searchReviewsQ);
+router.get('/search/country', searchCountryQ);
+router.get('/search/users', searchUsersQ);
 
 // ==========================================
 // ROUTE PARAMETERS
