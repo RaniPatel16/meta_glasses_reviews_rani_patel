@@ -664,6 +664,64 @@ const searchUsersQ = async (req, res) => {
   }
 };
 
+// @desc    Fetch average rating
+const getAverageRating = async (req, res) => {
+  try {
+    const stats = await Review.aggregate([
+      {
+        $group: {
+          _id: null,
+          averageRating: { $avg: '$rating' }
+        }
+      }
+    ]);
+    res.json(stats.length > 0 ? stats[0] : { averageRating: 0 });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+// @desc    Fetch highest rating
+const getHighestRating = async (req, res) => {
+  try {
+    const highest = await Review.findOne().sort({ rating: -1 }).limit(1);
+    res.json(highest ? highest : { message: 'No reviews found' });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+// @desc    Fetch lowest rating
+const getLowestRating = async (req, res) => {
+  try {
+    const lowest = await Review.findOne().sort({ rating: 1 }).limit(1);
+    res.json(lowest ? lowest : { message: 'No reviews found' });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+// @desc    Fetch user statistics (alias for /stats/user/:name)
+const getUserStatsAlias = async (req, res) => {
+  try {
+    const name = req.params.name;
+    const stats = await Review.aggregate([
+      { $match: { name: name } },
+      {
+        $group: {
+          _id: '$name',
+          totalReviews: { $sum: 1 },
+          averageRating: { $avg: '$rating' },
+          totalHelpful: { $sum: '$helpful' }
+        }
+      }
+    ]);
+    res.json(stats.length > 0 ? stats[0] : { message: 'User not found' });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
 module.exports = {
   getPositiveReviews,
   getNegativeReviews,
@@ -676,6 +734,10 @@ module.exports = {
   searchReviewsQ,
   searchCountryQ,
   searchUsersQ,
+  getAverageRating,
+  getHighestRating,
+  getLowestRating,
+  getUserStatsAlias,
   getAllReviews,
   getReviewById,
   createReview,

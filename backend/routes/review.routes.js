@@ -39,7 +39,11 @@ const {
   searchReviewsByUser,
   searchReviewsQ,
   searchCountryQ,
-  searchUsersQ
+  searchUsersQ,
+  getAverageRating,
+  getHighestRating,
+  getLowestRating,
+  getUserStatsAlias
 } = require('../controllers/review.controller');
 
 // ==========================================
@@ -93,7 +97,11 @@ router.get('/helpful', getHelpfulReviews);
 
 // Statistics routes
 router.get('/stats/reviews', getReviewStats);
+router.get('/stats/average-rating', getAverageRating);
+router.get('/stats/highest-rating', getHighestRating);
+router.get('/stats/lowest-rating', getLowestRating);
 router.get('/stats/country/:country', getCountryStats);
+router.get('/stats/user/:name', getUserStatsAlias);
 
 // Explicit Search routes (keyword)
 router.get('/search', searchReviews);
