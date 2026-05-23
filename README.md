@@ -237,12 +237,17 @@ GET     /admin/dashboard                → Admin dashboard summary
 ### 🔵 Advanced & Utility
 
 ```
-GET  /reviews/trending        → Trending reviews
-GET  /reviews/recent          → Most recent reviews
-GET  /reviews/random          → Random review
-GET  /compare?user1=X&user2=Y → Compare two users
-GET  /health                  → Server health status
-GET  /version                 → API version info
+GET      /reviews/random          → Random review
+GET      /reviews/trending        → Trending reviews
+GET      /reviews/recent          → Most recent reviews
+GET      /compare?user1=X&user2=Y → Compare two users side-by-side
+GET      /compare/rating          → Compare two ratings
+GET      /reviews/ai-summary      → Generate AI review summary
+GET      /reviews/sentiment-analysis → Analyze review sentiment distribution
+GET      /health                  → Server health status
+GET      /version                 → API version info
+HEAD     /reviews                 → Fetch headers for reviews
+OPTIONS  /search                  → Fetch allowed methods for search
 ```
 
 ---
@@ -400,9 +405,11 @@ Error Response:
 
 ---
 
-## 🧪 Testing
+## 🧪 Postman Testing & Documentation
 
-- **Postman:** Full API testing for all 80+ endpoints.
+> **[Click Here to View Postman API Documentation](#)** *(Add your exported Postman link here!)*
+
+- **Postman Collection:** Full API testing for all 30+ endpoints.
 - **CRUD Validation:** Ensuring data consistency after create/update/delete operations.
 - **Auth Testing:** Verifying JWT token generation, expiry, and protected route blocking.
 - **Pagination Testing:** Checking correct page results across large datasets.
