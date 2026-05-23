@@ -153,6 +153,7 @@ const createReview = async (req, res) => {
     // Check if review already exists
     const existedReview = await Review.findOne({ reviewID: req.body.reviewID });
     if (existedReview) {
+      // Handles duplicate review ID
       return res.status(409).json({ message: 'Review with this ID already exists' });
     }
 
@@ -175,7 +176,7 @@ const updateReview = async (req, res) => {
     if (review) {
       res.json(review);
     } else {
-      // Handles Invalid/Missing review ID
+      // Handles Invalid, Missing, or Malformed review ID
       res.status(404).json({ message: 'Review not found' });
     }
   } catch (error) {
