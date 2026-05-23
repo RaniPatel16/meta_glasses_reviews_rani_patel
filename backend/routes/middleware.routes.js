@@ -1,5 +1,6 @@
 const express = require('express');
 const router = express.Router();
+const { adminLimiter } = require('../middleware/rateLimiter');
 const {
   getAdminReviews,
   createAdminReview,
@@ -21,7 +22,7 @@ router.route('/admin/reviews/:reviewID')
   .delete(protect, authorize('admin'), deleteAdminReview)
   .patch(protect, authorize('admin'), updateAdminReview);
 
-router.get('/admin/dashboard', protect, authorize('admin'), getAdminDashboard);
+router.get('/admin/dashboard', protect, authorize('admin'), adminLimiter, getAdminDashboard);
 
 // Protected Routes (Requires authentication only)
 router.route('/protected/reviews')
