@@ -73,6 +73,7 @@ const login = async (req, res) => {
         token: generateToken(user._id),
       });
     } else {
+      // Handles invalid credentials
       res.status(401).json({ message: 'Invalid credentials' });
     }
   } catch (error) {
