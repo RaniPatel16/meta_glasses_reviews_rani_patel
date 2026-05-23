@@ -24,7 +24,13 @@ router.post('/auth/reset-password', resetPassword);
 router.post('/auth/refresh-token', refreshToken);
 
 // Protected Auth Routes
-router.get('/auth/me', protect, getMe);
+router.route('/auth/me')
+  .get(protect, getMe)
+  .head(protect, getMe)
+  .options((req, res) => {
+    res.header('Allow', 'GET, HEAD, OPTIONS');
+    res.status(200).end();
+  });
 router.delete('/auth/account', protect, deleteAccount);
 
 // Profile Routes

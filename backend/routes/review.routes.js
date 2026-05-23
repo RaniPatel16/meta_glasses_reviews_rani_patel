@@ -87,7 +87,12 @@ const { getTopHighestRatedReviews, getTopLowestRatedReviews, getMonthlyAverageRa
 // Main routes for /api/v1/reviews
 router.route('/')
   .get(generalLimiter, getAllReviews)
-  .post(createReviewLimiter, createReview);
+  .head(generalLimiter, getAllReviews)
+  .post(createReviewLimiter, createReview)
+  .options((req, res) => {
+    res.header('Allow', 'GET, HEAD, POST, OPTIONS');
+    res.status(200).end();
+  });
 
 // Specific utility routes
 router.get('/countries', getAllCountries);
@@ -114,7 +119,13 @@ router.get('/helpful', getHelpfulReviews);
 
 // Statistics routes
 router.get('/stats/reviews', getReviewStats);
-router.get('/stats/average-rating', getAverageRating);
+router.route('/stats/average-rating')
+  .get(getAverageRating)
+  .head(getAverageRating)
+  .options((req, res) => {
+    res.header('Allow', 'GET, HEAD, OPTIONS');
+    res.status(200).end();
+  });
 router.get('/stats/highest-rating', getHighestRating);
 router.get('/stats/lowest-rating', getLowestRating);
 router.get('/stats/positive-reviews', getPositiveReviewsStats);
@@ -164,8 +175,13 @@ router.get('/user/:name/rating/:rating', getReviewsByUserAndRating);
 // Base route for GET /reviews/:reviewID
 router.route('/:reviewID')
   .get(getReviewById)
+  .head(getReviewById)
   .patch(updateReview)
-  .delete(deleteLimiter, deleteReview);
+  .delete(deleteLimiter, deleteReview)
+  .options((req, res) => {
+    res.header('Allow', 'GET, HEAD, PATCH, DELETE, OPTIONS');
+    res.status(200).end();
+  });
 
 router.patch('/:reviewID/rating', updateReviewRating);
 
