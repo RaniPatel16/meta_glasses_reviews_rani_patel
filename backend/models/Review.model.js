@@ -6,6 +6,7 @@ const ReviewSchema = new mongoose.Schema({
     required: [true, 'Review ID is required'],
     unique: true,
     trim: true,
+    match: [/^rev-\w+$/i, 'Review ID format is invalid'],
   },
   name: {
     type: String,
@@ -34,6 +35,7 @@ const ReviewSchema = new mongoose.Schema({
     type: String,
     required: [true, 'Review title is required'],
     trim: true,
+    minlength: [5, 'Title must be at least 5 characters'],
     maxlength: [200, 'Title cannot exceed 200 characters'],
   },
   review: {
