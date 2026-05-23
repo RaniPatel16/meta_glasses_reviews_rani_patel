@@ -918,6 +918,52 @@ const getTrendingReviews = async (req, res) => {
   }
 };
 
+// @desc    Fetch recent reviews
+const getRecentReviews = async (req, res) => {
+  try {
+    const reviews = await Review.find().sort({ date: -1 }).limit(10);
+    res.json(reviews);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+// @desc    Generate AI review summary
+const getAiSummary = async (req, res) => {
+  try {
+    // Mock AI summary response
+    res.json({
+      summary: "Most users appreciate the Meta Glasses for their sleek design and clear audio. However, some users note that battery life could be improved during heavy use. Overall, sentiment is very positive.",
+      key_points: ["Sleek design", "Good audio", "Battery life needs work"],
+      overall_sentiment: "Positive"
+    });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+// @desc    Analyze review sentiment
+const getSentimentAnalysis = async (req, res) => {
+  try {
+    const totalReviews = await Review.countDocuments();
+    const positive = await Review.countDocuments({ rating: { $gte: 4 } });
+    const neutral = await Review.countDocuments({ rating: 3 });
+    const negative = await Review.countDocuments({ rating: { $lte: 2 } });
+
+    res.json({
+      total_analyzed: totalReviews,
+      sentiment_breakdown: {
+        positive: `${Math.round((positive / totalReviews) * 100)}%`,
+        neutral: `${Math.round((neutral / totalReviews) * 100)}%`,
+        negative: `${Math.round((negative / totalReviews) * 100)}%`
+      },
+      conclusion: positive > negative ? "Highly Positive" : "Mixed/Negative"
+    });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
 module.exports = {
   getPositiveReviews,
   getNegativeReviews,
@@ -973,5 +1019,8 @@ module.exports = {
   compareTwoUsers,
   compareRatings,
   getRandomReview,
-  getTrendingReviews
+  getTrendingReviews,
+  getRecentReviews,
+  getAiSummary,
+  getSentimentAnalysis
 };

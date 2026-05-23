@@ -51,7 +51,7 @@ const {
   getMostHelpfulReviewsStats,
   getVerifiedPurchasesStats
 } = require('../controllers/review.controller');
-const { getTopHighestRatedReviews, getTopLowestRatedReviews, getMonthlyAverageRating, compareTwoUsers, compareRatings, getRandomReview, getTrendingReviews } = require('../controllers/review.controller');
+const { getTopHighestRatedReviews, getTopLowestRatedReviews, getMonthlyAverageRating, compareTwoUsers, compareRatings, getRandomReview, getTrendingReviews, getRecentReviews, getAiSummary, getSentimentAnalysis } = require('../controllers/review.controller');
 
 // ==========================================
 // QUERY PARAMETERS (Handled by the root route)
@@ -107,6 +107,9 @@ router.get('/stats/monthly-average', getMonthlyAverageRating);
 router.get('/compare', compareTwoUsers);
 router.get('/compare/rating', compareRatings);
 router.get('/latest', getLatestReviews);
+router.get('/recent', getRecentReviews);
+router.get('/ai-summary', getAiSummary);
+router.get('/sentiment-analysis', getSentimentAnalysis);
 router.get('/helpful', getHelpfulReviews);
 
 // Statistics routes

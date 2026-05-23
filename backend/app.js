@@ -17,6 +17,14 @@ app.get('/', (req, res) => {
   });
 });
 
+app.get('/health', (req, res) => {
+  res.status(200).json({ status: 'UP', timestamp: new Date() });
+});
+
+app.get('/version', (req, res) => {
+  res.status(200).json({ version: '1.0.0' });
+});
+
 // Import Routes
 const reviewRouter = require('./routes/review.routes');
 const userRouter = require('./routes/user.routes');
