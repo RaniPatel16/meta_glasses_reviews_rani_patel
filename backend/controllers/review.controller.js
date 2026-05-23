@@ -153,7 +153,6 @@ const createReview = async (req, res) => {
     // Check if review already exists
     const existedReview = await Review.findOne({ reviewID: req.body.reviewID });
     if (existedReview) {
-      // Handles duplicate review ID
       return res.status(409).json({ message: 'Review with this ID already exists' });
     }
 
@@ -176,7 +175,7 @@ const updateReview = async (req, res) => {
     if (review) {
       res.json(review);
     } else {
-      // Handles Invalid, Missing, or Malformed review ID
+      // Handles Invalid/Missing review ID
       res.status(404).json({ message: 'Review not found' });
     }
   } catch (error) {
@@ -816,6 +815,109 @@ const getVerifiedPurchasesStats = async (req, res) => {
   }
 };
 
+// ==========================================
+// ADVANCE ROUTES
+// ==========================================
+
+// @desc    Fetch highest rated reviews
+const getTopHighestRatedReviews = async (req, res) => {
+  try {
+    const reviews = await Review.find().sort({ rating: -1 }).limit(10);
+    res.json(reviews);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+// @desc    Fetch lowest rated reviews
+const getTopLowestRatedReviews = async (req, res) => {
+  try {
+    const reviews = await Review.find().sort({ rating: 1 }).limit(10);
+    res.json(reviews);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+// @desc    Calculate monthly average rating
+const getMonthlyAverageRating = async (req, res) => {
+  try {
+    const stats = await Review.aggregate([
+      {
+        $group: {
+          _id: { year: { $year: '$date' }, month: { $month: '$date' } },
+          averageRating: { $avg: '$rating' },
+          numReviews: { $sum: 1 }
+        }
+      },
+      { $sort: { '_id.year': -1, '_id.month': -1 } }
+    ]);
+    res.json(stats);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+// @desc    Compare two users
+const compareTwoUsers = async (req, res) => {
+  try {
+    const { user1, user2 } = req.query;
+    const statsUser1 = await Review.aggregate([
+      { $match: { name: user1 } },
+      { $group: { _id: null, avgRating: { $avg: '$rating' }, totalReviews: { $sum: 1 }, helpful: { $sum: '$helpful' } } }
+    ]);
+    const statsUser2 = await Review.aggregate([
+      { $match: { name: user2 } },
+      { $group: { _id: null, avgRating: { $avg: '$rating' }, totalReviews: { $sum: 1 }, helpful: { $sum: '$helpful' } } }
+    ]);
+    res.json({
+      [user1]: statsUser1[0] || null,
+      [user2]: statsUser2[0] || null
+    });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+// @desc    Compare ratings
+const compareRatings = async (req, res) => {
+  try {
+    const { rating1, rating2 } = req.query;
+    const r1 = parseInt(rating1);
+    const r2 = parseInt(rating2);
+    const count1 = await Review.countDocuments({ rating: r1 });
+    const count2 = await Review.countDocuments({ rating: r2 });
+    res.json({
+      [`Rating_${r1}`]: count1,
+      [`Rating_${r2}`]: count2
+    });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+// @desc    Fetch random review
+const getRandomReview = async (req, res) => {
+  try {
+    const random = await Review.aggregate([{ $sample: { size: 1 } }]);
+    res.json(random[0] || {});
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+// @desc    Fetch trending reviews
+const getTrendingReviews = async (req, res) => {
+  try {
+    const reviews = await Review.find()
+      .sort({ helpful: -1, date: -1 })
+      .limit(10);
+    res.json(reviews);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
 module.exports = {
   getPositiveReviews,
   getNegativeReviews,
@@ -864,5 +966,12 @@ module.exports = {
   getReviewsByProfile,
   getReviewLink,
   getReviewsByImageStatus,
-  getReviewsByDevice
+  getReviewsByDevice,
+  getTopHighestRatedReviews,
+  getTopLowestRatedReviews,
+  getMonthlyAverageRating,
+  compareTwoUsers,
+  compareRatings,
+  getRandomReview,
+  getTrendingReviews
 };
