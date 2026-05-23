@@ -1,4 +1,4 @@
-const Review = require('../models/review.model');
+const Review = require('../models/Review.model');
 
 // @desc    Fetch all reviews (with Query Parameters support)
 const getAllReviews = async (req, res) => {

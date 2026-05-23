@@ -1,8 +1,8 @@
 const fs = require('fs');
 const mongoose = require('mongoose');
 const dotenv = require('dotenv');
-const Review = require('./models/review.model');
-const User = require('./models/user.model');
+const Review = require('./models/Review.model');
+const User = require('./models/User.model');
 const connectDB = require('./config/db');
 
 dotenv.config();
