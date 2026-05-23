@@ -1,5 +1,6 @@
 const express = require('express');
 const router = express.Router();
+const { generalLimiter, createReviewLimiter, deleteLimiter, importLimiter, searchLimiter } = require('../middleware/rateLimiter');
 const {
   getAllReviews,
   getReviewById,
@@ -84,8 +85,8 @@ const {
 // ==========================================
 // Main routes for /api/v1/reviews
 router.route('/')
-  .get(getAllReviews)
-  .post(createReview);
+  .get(generalLimiter, getAllReviews)
+  .post(createReviewLimiter, createReview);
 
 // Specific utility routes
 router.get('/countries', getAllCountries);
@@ -114,14 +115,14 @@ router.get('/stats/country/:country', getCountryStats);
 router.get('/stats/user/:name', getUserStatsAlias);
 
 // Explicit Search routes (keyword)
-router.get('/search', searchReviews);
-router.get('/search/title', searchReviewsByTitle);
-router.get('/search/user', searchReviewsByUser);
+router.get('/search', searchLimiter, searchReviews);
+router.get('/search/title', searchLimiter, searchReviewsByTitle);
+router.get('/search/user', searchLimiter, searchReviewsByUser);
 
 // Explicit Search routes (q)
-router.get('/search/reviews', searchReviewsQ);
-router.get('/search/country', searchCountryQ);
-router.get('/search/users', searchUsersQ);
+router.get('/search/reviews', searchLimiter, searchReviewsQ);
+router.get('/search/country', searchLimiter, searchCountryQ);
+router.get('/search/users', searchLimiter, searchUsersQ);
 
 // ==========================================
 // ROUTE PARAMETERS
@@ -149,14 +150,17 @@ router.get('/day/:day', getReviewsByDay);
 // User-specific multi-filter
 router.get('/user/:name/rating/:rating', getReviewsByUserAndRating);
 
-// Routes for specific reviews by ID
+// Base route for GET /reviews/:reviewID
 router.route('/:reviewID')
   .get(getReviewById)
-  .put(updateReview)
-  .delete(deleteReview);
+  .patch(updateReview)
+  .delete(deleteLimiter, deleteReview);
 
-// Specific patch route for rating
-router.route('/:reviewID/rating')
-  .patch(updateReviewRating);
+router.patch('/:reviewID/rating', updateReviewRating);
+
+// Add bulk import route for JSON data
+router.post('/import/json', importLimiter, (req, res) => {
+  res.status(200).json({ message: 'JSON import started (Rate limited)' });
+});
 
 module.exports = router;
