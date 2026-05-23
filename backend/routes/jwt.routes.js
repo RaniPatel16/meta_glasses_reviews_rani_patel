@@ -18,7 +18,12 @@ router.post('/verify-token', verifyToken);
 router.post('/refresh-token', refreshJwtToken);
 
 // Protected Routes
-router.get('/profile', protect, getJwtProfile);
+router.route('/profile')
+  .get(protect, getJwtProfile)
+  .options((req, res) => {
+    res.header('Allow', 'GET, OPTIONS');
+    res.status(200).end();
+  });
 router.get('/dashboard', protect, getJwtDashboard);
 
 // Role-Based Protected Routes
