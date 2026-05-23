@@ -16,7 +16,11 @@ const { protect, authorize } = require('../middleware/auth');
 // Admin Routes (Requires both authentication and admin role)
 router.route('/admin/reviews')
   .get(protect, authorize('admin'), getAdminReviews)
-  .post(protect, authorize('admin'), createAdminReview);
+  .post(protect, authorize('admin'), createAdminReview)
+  .options((req, res) => {
+    res.header('Allow', 'GET, POST, OPTIONS');
+    res.status(200).end();
+  });
 
 router.route('/admin/reviews/:reviewID')
   .delete(protect, authorize('admin'), deleteAdminReview)
