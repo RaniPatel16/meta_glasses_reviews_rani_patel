@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const { adminLimiter } = require('../middleware/rateLimiter');
+const { adminLimiter } = require('../middlewares/rateLimiter.middleware');
 const {
   getAdminReviews,
   createAdminReview,
@@ -11,7 +11,7 @@ const {
   createProtectedReview,
   deleteProtectedReview
 } = require('../controllers/middleware.controller');
-const { protect, authorize } = require('../middleware/auth');
+const { protect, authorize } = require('../middlewares/auth.middleware');
 
 // Admin Routes (Requires both authentication and admin role)
 router.route('/admin/reviews')

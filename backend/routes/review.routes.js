@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const { generalLimiter, createReviewLimiter, deleteLimiter, importLimiter, searchLimiter } = require('../middleware/rateLimiter');
+const { generalLimiter, createReviewLimiter, deleteLimiter, importLimiter, searchLimiter } = require('../middlewares/rateLimiter.middleware');
 const {
   getAllReviews,
   getReviewById,

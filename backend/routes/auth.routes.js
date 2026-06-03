@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const { registerLimiter, loginLimiter } = require('../middleware/rateLimiter');
+const { registerLimiter, loginLimiter } = require('../middlewares/rateLimiter.middleware');
 const {
   register,
   login,
@@ -13,7 +13,7 @@ const {
   getMe,
   deleteAccount
 } = require('../controllers/auth.controller');
-const { protect } = require('../middleware/auth');
+const { protect } = require('../middlewares/auth.middleware');
 
 // Authentication Routes
 router.post('/auth/register', registerLimiter, register);

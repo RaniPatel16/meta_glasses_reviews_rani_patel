@@ -17,7 +17,7 @@ app.get('/', (req, res) => {
   });
 });
 
-app.route('/health')
+app.route('/api/v1/health')
   .get((req, res) => {
     res.status(200).json({ status: 'UP', timestamp: new Date() });
   })
@@ -29,7 +29,7 @@ app.route('/health')
     res.status(200).end();
   });
 
-app.get('/version', (req, res) => {
+app.get('/api/v1/version', (req, res) => {
   res.status(200).json({ version: '1.0.0' });
 });
 

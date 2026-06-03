@@ -405,15 +405,7 @@ Error Response:
 
 ---
 
-## 🧪 Postman Testing & Documentation
 
-> **[Click Here to View Postman API Documentation](#)** *(Add your exported Postman link here!)*
-
-- **Postman Collection:** Full API testing for all 30+ endpoints.
-- **CRUD Validation:** Ensuring data consistency after create/update/delete operations.
-- **Auth Testing:** Verifying JWT token generation, expiry, and protected route blocking.
-- **Pagination Testing:** Checking correct page results across large datasets.
-- **Aggregation Testing:** Validating stats and analytics pipeline outputs.
 
 ---
 
