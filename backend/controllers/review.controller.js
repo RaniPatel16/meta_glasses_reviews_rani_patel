@@ -1,4 +1,4 @@
-const Review = require('../models/review.model');
+const Review = require('../models/Review.model');
 
 // @desc    Fetch all reviews (with Query Parameters support)
 const getAllReviews = async (req, res) => {
@@ -352,6 +352,8 @@ const getReviewsByCountryAndRating = async (req, res) => {
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
+};
+
 // @desc    Fetch country statistics
 const getCountryStats = async (req, res) => {
   try {

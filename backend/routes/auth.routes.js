@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const { registerLimiter, loginLimiter } = require('../middleware/rateLimiter');
+const { registerLimiter, loginLimiter } = require('../middlewares/rateLimiter.middleware');
 const {
   register,
   login,
@@ -13,11 +13,16 @@ const {
   getMe,
   deleteAccount
 } = require('../controllers/auth.controller');
-const { protect } = require('../middleware/auth');
+const { protect } = require('../middlewares/auth.middleware');
 
 // Authentication Routes
 router.post('/auth/register', registerLimiter, register);
-router.post('/auth/login', loginLimiter, login);
+router.route('/auth/login')
+  .post(loginLimiter, login)
+  .options((req, res) => {
+    res.header('Allow', 'POST, OPTIONS');
+    res.status(200).end();
+  });
 router.post('/auth/logout', logout);
 router.post('/auth/forgot-password', forgotPassword);
 router.post('/auth/reset-password', resetPassword);

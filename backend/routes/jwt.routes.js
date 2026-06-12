@@ -10,7 +10,7 @@ const {
   getJwtUser,
   logoutJwt
 } = require('../controllers/jwt.controller');
-const { protect, authorize } = require('../middleware/auth');
+const { protect, authorize } = require('../middlewares/auth.middleware');
 
 // Token Management Routes
 router.post('/generate-token', generateToken);
@@ -18,7 +18,12 @@ router.post('/verify-token', verifyToken);
 router.post('/refresh-token', refreshJwtToken);
 
 // Protected Routes
-router.get('/profile', protect, getJwtProfile);
+router.route('/profile')
+  .get(protect, getJwtProfile)
+  .options((req, res) => {
+    res.header('Allow', 'GET, OPTIONS');
+    res.status(200).end();
+  });
 router.get('/dashboard', protect, getJwtDashboard);
 
 // Role-Based Protected Routes

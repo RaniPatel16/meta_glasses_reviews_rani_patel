@@ -1,4 +1,4 @@
-const User = require('../models/user.model');
+const User = require('../models/User.model');
 
 // @desc    Fetch all users
 const getAllUsers = async (req, res) => {
@@ -24,7 +24,7 @@ const getAllUsers = async (req, res) => {
 const getReviewsByUser = async (req, res) => {
   try {
     // We search the Review collection using the 'name' field
-    const Review = require('../models/review.model');
+    const Review = require('../models/Review.model');
     const reviews = await Review.find({ name: req.params.name });
     res.json(reviews);
   } catch (error) {
@@ -35,7 +35,7 @@ const getReviewsByUser = async (req, res) => {
 // @desc    Fetch user statistics
 const getUserStats = async (req, res) => {
   try {
-    const Review = require('../models/review.model');
+    const Review = require('../models/Review.model');
     const stats = await Review.aggregate([
       { $match: { name: req.params.name } },
       {

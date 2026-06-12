@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const { generalLimiter, createReviewLimiter, deleteLimiter, importLimiter, searchLimiter } = require('../middleware/rateLimiter');
+const { generalLimiter, createReviewLimiter, deleteLimiter, importLimiter, searchLimiter } = require('../middlewares/rateLimiter.middleware');
 const {
   getAllReviews,
   getReviewById,
@@ -137,7 +137,12 @@ router.get('/stats/country/:country', getCountryStats);
 router.get('/stats/user/:name', getUserStatsAlias);
 
 // Explicit Search routes (keyword)
-router.get('/search', searchLimiter, searchReviews);
+router.route('/search')
+  .get(searchLimiter, searchReviews)
+  .options((req, res) => {
+    res.header('Allow', 'GET, OPTIONS');
+    res.status(200).end();
+  });
 router.get('/search/title', searchLimiter, searchReviewsByTitle);
 router.get('/search/user', searchLimiter, searchReviewsByUser);
 
