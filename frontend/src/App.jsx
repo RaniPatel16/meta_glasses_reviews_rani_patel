@@ -11,9 +11,7 @@ import Users from './pages/Users';
 import ReviewsData from './pages/ReviewsData';
 import Dashboard from './pages/Dashboard';
 import Profile from './pages/Profile';
-
-// Placeholders for inner pages
-const Settings = () => <div className="p-8 text-center text-2xl dark:text-white">Settings Content Placeholder</div>;
+import Settings from './pages/Settings';
 
 function App() {
   const mode = useSelector((state) => state.ui.mode);
