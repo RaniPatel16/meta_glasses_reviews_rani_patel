@@ -1,4 +1,4 @@
-# 🕶️ Meta Glasses Reviews — Backend API
+# 🕶️ Meta Glasses Reviews — Full Stack Dashboard
 
 > **Full Stack Project | Semester 2 | 80 Marks**  
 > Student: Rani Patel | Course: CodingGita
@@ -256,14 +256,15 @@ OPTIONS  /search                  → Fetch allowed methods for search
 
 | Layer | Technology |
 |---|---|
+| **Frontend Framework** | React.js (Vite) |
+| **State Management** | Redux Toolkit |
+| **Styling & UI** | Tailwind CSS v4, Material UI (MUI) |
+| **Data Visualization** | Recharts |
+| **Form Handling** | Formik & Yup |
 | **Backend** | Node.js, Express.js |
 | **Database** | MongoDB (Mongoose ODM) |
 | **Authentication** | JWT (JSON Web Tokens), bcryptjs |
-| **Security** | Helmet.js, CORS |
-| **Rate Limiting** | express-rate-limit |
-| **Logging** | Morgan |
-| **Config** | dotenv |
-| **API Testing** | Postman |
+| **Security & Utilities** | Helmet.js, CORS, express-rate-limit, Morgan |
 
 ---
 
@@ -321,6 +322,16 @@ meta_glasses_reviews_rani_patel/
 │   ├── package.json
 │   └── server.js
 │
+├── frontend/
+│   ├── src/
+│   │   ├── components/  # Layouts, Modals, SEO, routing
+│   │   ├── pages/       # Dashboard, Login, ReviewsData, Profile, Settings
+│   │   ├── store/       # Redux slices (auth, ui, reviews, users)
+│   │   └── services/    # Axios API endpoints
+│   ├── index.html
+│   ├── vite.config.js
+│   └── package.json
+│
 └── README.md
 ```
 
@@ -354,16 +365,26 @@ NODE_ENV=development
 node seed/seed.js
 ```
 
-### 5️⃣ Run the Server
+### 5️⃣ Run the Project
+
+You will need two separate terminal windows.
+
+**Terminal 1 (Backend):**
 ```bash
+cd backend
 # Development mode (with nodemon)
 npm run dev
-
-# Production mode
-npm start
 ```
 
-Server runs at: `http://localhost:5000`
+**Terminal 2 (Frontend):**
+```bash
+cd frontend
+npm install
+npm run dev
+```
+
+- Backend API runs at: `http://localhost:5000`
+- Frontend Dashboard runs at: `http://localhost:5173`
 
 ---
 
@@ -442,8 +463,8 @@ Error Response:
 
 | Phase | Dates | Status |
 |---|---|---|
-| Backend Development | May 13 – May 28, 2026 | 🟡 In Progress |
-| Frontend Development | May 29 – June 13, 2026 | ⏳ Not Started |
+| Backend Development | May 13 – May 28, 2026 | 🟢 Completed |
+| Frontend Development | May 29 – June 13, 2026 | 🟢 Completed |
 
 ---
 
