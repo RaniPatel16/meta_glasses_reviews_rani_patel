@@ -1,143 +1,163 @@
-import React from 'react';
-import { Grid, Paper, Typography, Box } from '@mui/material';
+import React, { useEffect, useState } from 'react';
+import { Grid, Paper, Typography, CircularProgress, Box } from '@mui/material';
+import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, PieChart, Pie, Cell } from 'recharts';
+import api from '../services/api';
 import PeopleIcon from '@mui/icons-material/People';
-import RateReviewIcon from '@mui/icons-material/RateReview';
-import StarIcon from '@mui/icons-material/Star';
-import CheckCircleIcon from '@mui/icons-material/CheckCircle';
-import {
-  BarChart,
-  Bar,
-  XAxis,
-  YAxis,
-  CartesianGrid,
-  Tooltip,
-  ResponsiveContainer,
-  PieChart,
-  Pie,
-  Cell,
-} from 'recharts';
-
-// Placeholder data for Step 4 (will be replaced by real backend data in Step 5)
-const mockBarData = [
-  { name: 'Jan', reviews: 400 },
-  { name: 'Feb', reviews: 300 },
-  { name: 'Mar', reviews: 550 },
-  { name: 'Apr', reviews: 200 },
-  { name: 'May', reviews: 700 },
-  { name: 'Jun', reviews: 650 },
-];
-
-const mockPieData = [
-  { name: 'Verified', value: 800 },
-  { name: 'Unverified', value: 300 },
-];
-
-const COLORS = ['#10b981', '#f43f5e'];
-
-const StatCard = ({ title, value, icon: Icon, colorClass }) => (
-  <Paper className="glass rounded-2xl p-6 flex items-center justify-between shadow-sm border border-slate-200 dark:border-slate-800 bg-white/40 dark:bg-slate-900/40">
-    <div>
-      <Typography variant="body2" className="text-slate-500 dark:text-slate-400 font-medium mb-1">
-        {title}
-      </Typography>
-      <Typography variant="h4" className="font-bold text-slate-800 dark:text-white">
-        {value}
-      </Typography>
-    </div>
-    <div className={`p-4 rounded-xl ${colorClass}`}>
-      <Icon fontSize="large" className="text-white" />
-    </div>
-  </Paper>
-);
+import StarRateIcon from '@mui/icons-material/StarRate';
+import ThumbUpIcon from '@mui/icons-material/ThumbUp';
 
 const Dashboard = () => {
+  const [loading, setLoading] = useState(true);
+  const [stats, setStats] = useState({
+    totalUsers: 0,
+    averageRating: 0,
+    totalPositive: 0,
+    topReviewers: []
+  });
+
+  useEffect(() => {
+    const fetchDashboardData = async () => {
+      try {
+        setLoading(true);
+        // Fetch all necessary aggregation data concurrently
+        const [usersRes, avgRatingRes, positiveRes, topReviewersRes] = await Promise.all([
+          api.get('/users?limit=1'), // Just need pagination metadata for total
+          api.get('/reviews/stats/average-rating'),
+          api.get('/reviews/stats/positive-reviews'),
+          api.get('/reviews/stats/top-reviewers?limit=5')
+        ]);
+
+        // Process users count (depends on how backend returns pagination)
+        let totalUsers = 0;
+        if (usersRes.data && usersRes.data.length > 0) {
+           totalUsers = usersRes.data.length; // Fallback if no meta
+        }
+        if (usersRes.data.pagination) {
+           totalUsers = usersRes.data.pagination.total || usersRes.data.length;
+        }
+
+        setStats({
+          totalUsers: totalUsers || 1, // Fallback placeholder
+          averageRating: avgRatingRes.data?.averageRating?.toFixed(1) || 0,
+          totalPositive: positiveRes.data?.totalPositive || 0,
+          topReviewers: topReviewersRes.data || []
+        });
+      } catch (error) {
+        console.error('Error fetching analytics data', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchDashboardData();
+  }, []);
+
+  if (loading) {
+    return (
+      <Box display="flex" justifyContent="center" alignItems="center" minHeight="60vh">
+        <CircularProgress className="text-indigo-500" />
+      </Box>
+    );
+  }
+
+  const COLORS = ['#6366f1', '#ec4899', '#14b8a6', '#f59e0b', '#8b5cf6'];
+
   return (
     <div className="flex flex-col gap-6">
-      {/* Header section */}
       <div>
-        <h1 className="text-2xl sm:text-3xl font-bold text-slate-800 dark:text-white">Analytics Dashboard</h1>
-        <p className="text-sm text-slate-500 dark:text-slate-400 mt-1">Overview of system metrics and review statistics.</p>
+        <h1 className="text-2xl sm:text-3xl font-bold text-slate-800 dark:text-white">Dashboard Analytics</h1>
+        <p className="text-sm text-slate-500 dark:text-slate-400 mt-1">Overview of your Meta Glasses reviews dataset.</p>
       </div>
 
       {/* Summary Cards */}
-      <Grid container spacing={3}>
-        <Grid item xs={12} sm={6} md={3}>
-          <StatCard 
-            title="Total Users" 
-            value="1,245" 
-            icon={PeopleIcon} 
-            colorClass="bg-blue-500 shadow-lg shadow-blue-500/30" 
-          />
+      <Grid container spacing={4}>
+        <Grid item xs={12} sm={4}>
+          <Paper className="glass rounded-2xl p-6 flex items-center gap-4 border border-white/40 dark:border-white/5 shadow-sm">
+            <div className="p-3 rounded-full bg-indigo-100 dark:bg-indigo-500/20 text-indigo-600 dark:text-indigo-400">
+              <PeopleIcon fontSize="large" />
+            </div>
+            <div>
+              <Typography className="text-slate-500 dark:text-slate-400 text-sm font-semibold uppercase">Total Users</Typography>
+              <Typography className="text-3xl font-bold text-slate-800 dark:text-white">{stats.totalUsers}</Typography>
+            </div>
+          </Paper>
         </Grid>
-        <Grid item xs={12} sm={6} md={3}>
-          <StatCard 
-            title="Total Reviews" 
-            value="8,432" 
-            icon={RateReviewIcon} 
-            colorClass="bg-indigo-500 shadow-lg shadow-indigo-500/30" 
-          />
+
+        <Grid item xs={12} sm={4}>
+          <Paper className="glass rounded-2xl p-6 flex items-center gap-4 border border-white/40 dark:border-white/5 shadow-sm">
+            <div className="p-3 rounded-full bg-amber-100 dark:bg-amber-500/20 text-amber-600 dark:text-amber-400">
+              <StarRateIcon fontSize="large" />
+            </div>
+            <div>
+              <Typography className="text-slate-500 dark:text-slate-400 text-sm font-semibold uppercase">Avg Rating</Typography>
+              <Typography className="text-3xl font-bold text-slate-800 dark:text-white">{stats.averageRating} / 5</Typography>
+            </div>
+          </Paper>
         </Grid>
-        <Grid item xs={12} sm={6} md={3}>
-          <StatCard 
-            title="Average Rating" 
-            value="4.6" 
-            icon={StarIcon} 
-            colorClass="bg-amber-500 shadow-lg shadow-amber-500/30" 
-          />
-        </Grid>
-        <Grid item xs={12} sm={6} md={3}>
-          <StatCard 
-            title="Verified Purchases" 
-            value="6,120" 
-            icon={CheckCircleIcon} 
-            colorClass="bg-emerald-500 shadow-lg shadow-emerald-500/30" 
-          />
+
+        <Grid item xs={12} sm={4}>
+          <Paper className="glass rounded-2xl p-6 flex items-center gap-4 border border-white/40 dark:border-white/5 shadow-sm">
+            <div className="p-3 rounded-full bg-emerald-100 dark:bg-emerald-500/20 text-emerald-600 dark:text-emerald-400">
+              <ThumbUpIcon fontSize="large" />
+            </div>
+            <div>
+              <Typography className="text-slate-500 dark:text-slate-400 text-sm font-semibold uppercase">Positive Reviews</Typography>
+              <Typography className="text-3xl font-bold text-slate-800 dark:text-white">{stats.totalPositive}</Typography>
+            </div>
+          </Paper>
         </Grid>
       </Grid>
 
-      {/* Charts Section */}
-      <Grid container spacing={3}>
-        <Grid item xs={12} md={8}>
-          <Paper className="glass rounded-2xl p-6 shadow-sm border border-slate-200 dark:border-slate-800 h-[400px] flex flex-col">
-            <Typography variant="h6" className="font-bold text-slate-800 dark:text-white mb-4">
-              Reviews Over Time (Placeholder)
+      {/* Charts */}
+      <Grid container spacing={4}>
+        <Grid item xs={12} lg={8}>
+          <Paper className="glass rounded-2xl p-6 border border-white/40 dark:border-white/5 shadow-sm h-full">
+            <Typography variant="h6" className="font-bold text-slate-800 dark:text-white mb-6">
+              Top Reviewers (By Total Reviews)
             </Typography>
-            <Box className="flex-grow w-full">
+            <div className="h-72 w-full">
               <ResponsiveContainer width="100%" height="100%">
-                <BarChart data={mockBarData} margin={{ top: 10, right: 30, left: 0, bottom: 0 }}>
-                  <CartesianGrid strokeDasharray="3 3" stroke="#e2e8f0" vertical={false} />
-                  <XAxis dataKey="name" axisLine={false} tickLine={false} tick={{ fill: '#64748b' }} />
-                  <YAxis axisLine={false} tickLine={false} tick={{ fill: '#64748b' }} />
+                <BarChart data={stats.topReviewers} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
+                  <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="var(--tw-colors-slate-200)" className="dark:opacity-20" />
+                  <XAxis dataKey="_id" tick={{ fill: '#64748b', fontSize: 12 }} axisLine={false} tickLine={false} />
+                  <YAxis tick={{ fill: '#64748b', fontSize: 12 }} axisLine={false} tickLine={false} />
                   <Tooltip 
-                    cursor={{ fill: 'rgba(99, 102, 241, 0.1)' }}
+                    cursor={{ fill: 'transparent' }}
                     contentStyle={{ borderRadius: '12px', border: 'none', boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1)' }}
                   />
-                  <Bar dataKey="reviews" fill="#6366f1" radius={[4, 4, 0, 0]} barSize={40} />
+                  <Bar dataKey="totalReviews" radius={[6, 6, 0, 0]}>
+                    {stats.topReviewers.map((entry, index) => (
+                      <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                    ))}
+                  </Bar>
                 </BarChart>
               </ResponsiveContainer>
-            </Box>
+            </div>
           </Paper>
         </Grid>
         
-        <Grid item xs={12} md={4}>
-          <Paper className="glass rounded-2xl p-6 shadow-sm border border-slate-200 dark:border-slate-800 h-[400px] flex flex-col">
-            <Typography variant="h6" className="font-bold text-slate-800 dark:text-white mb-4">
-              Review Authenticity (Placeholder)
+        <Grid item xs={12} lg={4}>
+          <Paper className="glass rounded-2xl p-6 border border-white/40 dark:border-white/5 shadow-sm h-full flex flex-col">
+            <Typography variant="h6" className="font-bold text-slate-800 dark:text-white mb-2">
+              Reviewer Helpfulness
             </Typography>
-            <Box className="flex-grow w-full flex items-center justify-center">
+            <Typography variant="body2" className="text-slate-500 mb-6">
+              Distribution of helpful votes among top reviewers
+            </Typography>
+            <div className="flex-1 min-h-[250px]">
               <ResponsiveContainer width="100%" height="100%">
                 <PieChart>
                   <Pie
-                    data={mockPieData}
+                    data={stats.topReviewers.filter(r => r.totalHelpful > 0)}
                     cx="50%"
                     cy="50%"
                     innerRadius={60}
-                    outerRadius={100}
+                    outerRadius={80}
                     paddingAngle={5}
-                    dataKey="value"
-                    stroke="none"
+                    dataKey="totalHelpful"
+                    nameKey="_id"
                   >
-                    {mockPieData.map((entry, index) => (
+                    {stats.topReviewers.map((entry, index) => (
                       <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
                     ))}
                   </Pie>
@@ -146,16 +166,6 @@ const Dashboard = () => {
                   />
                 </PieChart>
               </ResponsiveContainer>
-            </Box>
-            <div className="flex justify-center gap-6 mt-4">
-              <div className="flex items-center gap-2">
-                <div className="w-3 h-3 rounded-full bg-emerald-500"></div>
-                <span className="text-sm text-slate-600 dark:text-slate-400">Verified</span>
-              </div>
-              <div className="flex items-center gap-2">
-                <div className="w-3 h-3 rounded-full bg-rose-500"></div>
-                <span className="text-sm text-slate-600 dark:text-slate-400">Unverified</span>
-              </div>
             </div>
           </Paper>
         </Grid>
