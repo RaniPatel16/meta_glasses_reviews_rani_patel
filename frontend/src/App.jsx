@@ -8,6 +8,7 @@ import ProtectedRoute from './components/routes/ProtectedRoute';
 import Login from './pages/Login';
 import Register from './pages/Register';
 import Users from './pages/Users';
+import ReviewsData from './pages/ReviewsData';
 
 // Placeholders for inner pages
 const Dashboard = () => <div className="p-8 text-center text-2xl dark:text-white">Dashboard Content Placeholder</div>;
@@ -101,6 +102,7 @@ function App() {
             <Route index element={<Navigate to="/dashboard" replace />} />
             <Route path="dashboard" element={<Dashboard />} />
             <Route path="users" element={<Users />} />
+            <Route path="reviews" element={<ReviewsData />} />
             <Route path="profile" element={<Profile />} />
             <Route path="settings" element={<Settings />} />
           </Route>
