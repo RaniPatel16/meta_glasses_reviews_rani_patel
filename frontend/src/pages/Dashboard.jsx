@@ -5,6 +5,7 @@ import api from '../services/api';
 import PeopleIcon from '@mui/icons-material/People';
 import StarRateIcon from '@mui/icons-material/StarRate';
 import ThumbUpIcon from '@mui/icons-material/ThumbUp';
+import SEO from '../components/seo/SEO';
 
 const Dashboard = () => {
   const [loading, setLoading] = useState(true);
@@ -63,7 +64,9 @@ const Dashboard = () => {
   const COLORS = ['#6366f1', '#ec4899', '#14b8a6', '#f59e0b', '#8b5cf6'];
 
   return (
-    <div className="flex flex-col gap-6">
+    <>
+      <SEO title="Analytics Overview" description="Real-time analytics and statistics of your reviews dataset." />
+      <div className="flex flex-col gap-6">
       <div>
         <h1 className="text-2xl sm:text-3xl font-bold text-slate-800 dark:text-white">Dashboard Analytics</h1>
         <p className="text-sm text-slate-500 dark:text-slate-400 mt-1">Overview of your Meta Glasses reviews dataset.</p>
@@ -171,6 +174,7 @@ const Dashboard = () => {
         </Grid>
       </Grid>
     </div>
+    </>
   );
 };
 
