@@ -1,17 +1,18 @@
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
-import { ThemeProvider, createTheme, CssBaseline } from '@mui/material';
-import { useEffect, useMemo } from 'react';
+import { ThemeProvider, createTheme, CssBaseline, CircularProgress } from '@mui/material';
+import { useEffect, useMemo, lazy, Suspense } from 'react';
 import { Toaster } from 'react-hot-toast';
 import AdminLayout from './components/layout/AdminLayout';
 import ProtectedRoute from './components/routes/ProtectedRoute';
-import Login from './pages/Login';
-import Register from './pages/Register';
-import Users from './pages/Users';
-import ReviewsData from './pages/ReviewsData';
-import Dashboard from './pages/Dashboard';
-import Profile from './pages/Profile';
-import Settings from './pages/Settings';
+
+const Login = lazy(() => import('./pages/Login'));
+const Register = lazy(() => import('./pages/Register'));
+const Users = lazy(() => import('./pages/Users'));
+const ReviewsData = lazy(() => import('./pages/ReviewsData'));
+const Dashboard = lazy(() => import('./pages/Dashboard'));
+const Profile = lazy(() => import('./pages/Profile'));
+const Settings = lazy(() => import('./pages/Settings'));
 
 function App() {
   const mode = useSelector((state) => state.ui.mode);
@@ -90,24 +91,30 @@ function App() {
         }} 
       />
       <Router>
-        <Routes>
-          {/* Public Routes */}
-          <Route path="/login" element={<Login />} />
-          <Route path="/register" element={<Register />} />
-          
-          {/* Protected Routes inside Layout */}
-          <Route path="/" element={<ProtectedRoute><AdminLayout /></ProtectedRoute>}>
-            <Route index element={<Navigate to="/dashboard" replace />} />
-            <Route path="dashboard" element={<Dashboard />} />
-            <Route path="users" element={<Users />} />
-            <Route path="reviews" element={<ReviewsData />} />
-            <Route path="profile" element={<Profile />} />
-            <Route path="settings" element={<Settings />} />
-          </Route>
-          
-          {/* Fallback */}
-          <Route path="*" element={<Navigate to="/dashboard" replace />} />
-        </Routes>
+        <Suspense fallback={
+          <div className="flex items-center justify-center min-h-screen bg-slate-50 dark:bg-[#0b0f19]">
+            <CircularProgress className="text-indigo-500" />
+          </div>
+        }>
+          <Routes>
+            {/* Public Routes */}
+            <Route path="/login" element={<Login />} />
+            <Route path="/register" element={<Register />} />
+            
+            {/* Protected Routes inside Layout */}
+            <Route path="/" element={<ProtectedRoute><AdminLayout /></ProtectedRoute>}>
+              <Route index element={<Navigate to="/dashboard" replace />} />
+              <Route path="dashboard" element={<Dashboard />} />
+              <Route path="users" element={<Users />} />
+              <Route path="reviews" element={<ReviewsData />} />
+              <Route path="profile" element={<Profile />} />
+              <Route path="settings" element={<Settings />} />
+            </Route>
+            
+            {/* Fallback */}
+            <Route path="*" element={<Navigate to="/dashboard" replace />} />
+          </Routes>
+        </Suspense>
       </Router>
     </ThemeProvider>
   );
