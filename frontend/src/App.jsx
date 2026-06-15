@@ -10,10 +10,8 @@ import Register from './pages/Register';
 import Users from './pages/Users';
 import ReviewsData from './pages/ReviewsData';
 import Dashboard from './pages/Dashboard';
-
-// Placeholders for inner pages
-const Profile = () => <div className="p-8 text-center text-2xl dark:text-white">Profile Content Placeholder</div>;
-const Settings = () => <div className="p-8 text-center text-2xl dark:text-white">Settings Content Placeholder</div>;
+import Profile from './pages/Profile';
+import Settings from './pages/Settings';
 
 function App() {
   const mode = useSelector((state) => state.ui.mode);
