@@ -8,6 +8,7 @@ import DeleteUserModal from '../components/users/DeleteUserModal';
 import { Button, Pagination, TextField, InputAdornment } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 import SearchIcon from '@mui/icons-material/Search';
+import SEO from '../components/seo/SEO';
 
 const Users = () => {
   const dispatch = useDispatch();
@@ -32,8 +33,10 @@ const Users = () => {
   };
 
   return (
-    <div className="flex flex-col gap-6">
-      {/* Header section */}
+    <>
+      <SEO title="Users Management" description="Manage system administrators and user roles." />
+      <div className="flex flex-col gap-6">
+        {/* Header section */}
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
         <div>
           <h1 className="text-2xl sm:text-3xl font-bold text-slate-800 dark:text-white">User Management</h1>
@@ -108,6 +111,7 @@ const Users = () => {
       {isEditOpen && <EditUserModal open={isEditOpen} onClose={() => setIsEditOpen(false)} />}
       <DeleteUserModal open={isDeleteOpen} onClose={() => setIsDeleteOpen(false)} />
     </div>
+    </>
   );
 };
 

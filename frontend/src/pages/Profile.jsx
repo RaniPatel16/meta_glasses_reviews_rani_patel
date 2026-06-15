@@ -5,6 +5,7 @@ import * as Yup from 'yup';
 import { TextField, Button, CircularProgress, Paper, Avatar } from '@mui/material';
 import { updateProfile, clearAuthError } from '../store/slices/authSlice';
 import toast from 'react-hot-toast';
+import SEO from '../components/seo/SEO';
 
 const Profile = () => {
   const dispatch = useDispatch();
@@ -48,7 +49,9 @@ const Profile = () => {
   if (!user) return null;
 
   return (
-    <div className="flex flex-col gap-6 max-w-4xl mx-auto w-full">
+    <>
+      <SEO title="My Profile" description="Manage your admin profile and personal preferences." />
+      <div className="flex flex-col gap-6 max-w-4xl mx-auto w-full">
       <div>
         <h1 className="text-2xl sm:text-3xl font-bold text-slate-800 dark:text-white">Profile Management</h1>
         <p className="text-sm text-slate-500 dark:text-slate-400 mt-1">Update your personal information and account settings.</p>
@@ -137,6 +140,7 @@ const Profile = () => {
         </div>
       </Paper>
     </div>
+    </>
   );
 };
 

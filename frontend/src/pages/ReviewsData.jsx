@@ -5,6 +5,7 @@ import ReviewTable from '../components/reviews/ReviewTable';
 import { Button, Pagination, TextField, InputAdornment, MenuItem } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 import SearchIcon from '@mui/icons-material/Search';
+import SEO from '../components/seo/SEO';
 
 const ReviewsData = () => {
   const dispatch = useDispatch();
@@ -51,7 +52,9 @@ const ReviewsData = () => {
   };
 
   return (
-    <div className="flex flex-col gap-6">
+    <>
+      <SEO title="Reviews Management" description="View, moderate, and manage all customer product reviews." />
+      <div className="flex flex-col gap-6">
       {/* Header section */}
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
         <div>
@@ -147,6 +150,7 @@ const ReviewsData = () => {
         </div>
       )}
     </div>
+    </>
   );
 };
 
