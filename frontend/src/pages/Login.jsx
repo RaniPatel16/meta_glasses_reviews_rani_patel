@@ -9,6 +9,7 @@ import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import EmailOutlined from '@mui/icons-material/EmailOutlined';
 import LockOutlined from '@mui/icons-material/LockOutlined';
+import SEO from '../components/seo/SEO';
 
 const Login = () => {
   const dispatch = useDispatch();
@@ -41,7 +42,9 @@ const Login = () => {
   });
 
   return (
-    <div className="flex min-h-screen bg-slate-50 dark:bg-[#0b0f19] transition-colors relative overflow-hidden">
+    <>
+      <SEO title="Secure Login" description="Sign in to your Meta Glasses Reviews Admin Dashboard." />
+      <div className="flex min-h-screen bg-slate-50 dark:bg-[#0b0f19] transition-colors relative overflow-hidden">
       {/* Left Panel - Branding/Art */}
       <div className="hidden lg:flex w-1/2 relative flex-col justify-center items-center overflow-hidden border-r border-slate-200 dark:border-slate-800">
         {/* Animated Background Blobs */}
@@ -211,6 +214,7 @@ const Login = () => {
         </div>
       </div>
     </div>
+    </>
   );
 };
 

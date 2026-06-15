@@ -10,6 +10,7 @@ import LightModeIcon from '@mui/icons-material/LightMode';
 import TableViewIcon from '@mui/icons-material/TableView';
 import NotificationsActiveIcon from '@mui/icons-material/NotificationsActive';
 import toast from 'react-hot-toast';
+import SEO from '../components/seo/SEO';
 
 const Settings = () => {
   const dispatch = useDispatch();
@@ -47,7 +48,9 @@ const Settings = () => {
   };
 
   return (
-    <div className="flex flex-col gap-6 max-w-4xl mx-auto w-full">
+    <>
+      <SEO title="Settings & Preferences" description="Configure your workspace and system notifications." />
+      <div className="flex flex-col gap-6 max-w-4xl mx-auto w-full">
       <div>
         <h1 className="text-2xl sm:text-3xl font-bold text-slate-800 dark:text-white">Settings & Preferences</h1>
         <p className="text-sm text-slate-500 dark:text-slate-400 mt-1">Manage your UI theme, dashboard preferences, and local storage configurations.</p>
@@ -169,6 +172,7 @@ const Settings = () => {
 
       </div>
     </div>
+    </>
   );
 };
 

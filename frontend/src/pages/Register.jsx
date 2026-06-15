@@ -10,6 +10,7 @@ import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import EmailOutlined from '@mui/icons-material/EmailOutlined';
 import LockOutlined from '@mui/icons-material/LockOutlined';
 import PersonOutlined from '@mui/icons-material/PersonOutlined';
+import SEO from '../components/seo/SEO';
 
 const Register = () => {
   const dispatch = useDispatch();
@@ -47,28 +48,30 @@ const Register = () => {
   });
 
   return (
-    <div className="flex min-h-screen bg-slate-50 dark:bg-[#0b0f19] transition-colors relative overflow-hidden flex-row-reverse">
-      {/* Right Panel - Branding/Art */}
-      <div className="hidden lg:flex w-1/2 relative flex-col justify-center items-center overflow-hidden border-l border-slate-200 dark:border-slate-800">
-        {/* Animated Background Blobs */}
-        <div className="absolute top-1/4 right-1/4 w-96 h-96 bg-pink-500/20 dark:bg-pink-600/30 rounded-full mix-blend-multiply dark:mix-blend-screen filter blur-[100px] animate-blob z-0"></div>
-        <div className="absolute bottom-1/3 left-1/4 w-96 h-96 bg-amber-500/20 dark:bg-amber-600/30 rounded-full mix-blend-multiply dark:mix-blend-screen filter blur-[100px] animate-blob animation-delay-2000 z-0"></div>
-        <div className="absolute top-1/2 left-1/2 w-96 h-96 bg-indigo-500/20 dark:bg-indigo-600/30 rounded-full mix-blend-multiply dark:mix-blend-screen filter blur-[100px] animate-blob animation-delay-4000 z-0"></div>
-        
-        <div className="relative z-10 text-center px-12 max-w-2xl">
-          <div className="mb-8 inline-flex items-center justify-center p-4 bg-white/10 dark:bg-black/20 rounded-3xl backdrop-blur-md border border-white/20 dark:border-white/5 shadow-2xl">
-             <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-pink-500 to-amber-500 flex items-center justify-center shadow-inner">
-               <span className="text-3xl font-extrabold text-white">M</span>
-             </div>
+    <>
+      <SEO title="Register Admin" description="Create a new admin account for the Meta Glasses Reviews Dashboard." />
+      <div className="flex min-h-screen bg-slate-50 dark:bg-[#0b0f19] transition-colors relative overflow-hidden flex-row-reverse">
+        {/* Right Panel - Branding/Art */}
+        <div className="hidden lg:flex w-1/2 relative flex-col justify-center items-center overflow-hidden border-l border-slate-200 dark:border-slate-800">
+          {/* Animated Background Blobs */}
+          <div className="absolute top-1/4 right-1/4 w-96 h-96 bg-pink-500/20 dark:bg-pink-600/30 rounded-full mix-blend-multiply dark:mix-blend-screen filter blur-[100px] animate-blob z-0"></div>
+          <div className="absolute bottom-1/3 left-1/4 w-96 h-96 bg-amber-500/20 dark:bg-amber-600/30 rounded-full mix-blend-multiply dark:mix-blend-screen filter blur-[100px] animate-blob animation-delay-2000 z-0"></div>
+          <div className="absolute top-1/2 left-1/2 w-96 h-96 bg-indigo-500/20 dark:bg-indigo-600/30 rounded-full mix-blend-multiply dark:mix-blend-screen filter blur-[100px] animate-blob animation-delay-4000 z-0"></div>
+          
+          <div className="relative z-10 text-center px-12 max-w-2xl">
+            <div className="mb-8 inline-flex items-center justify-center p-4 bg-white/10 dark:bg-black/20 rounded-3xl backdrop-blur-md border border-white/20 dark:border-white/5 shadow-2xl">
+               <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-pink-500 to-amber-500 flex items-center justify-center shadow-inner">
+                 <span className="text-3xl font-extrabold text-white">M</span>
+               </div>
+            </div>
+            <h1 className="text-5xl lg:text-6xl font-extrabold text-transparent bg-clip-text bg-gradient-to-l from-pink-600 via-amber-500 to-orange-500 dark:from-pink-400 dark:via-amber-400 dark:to-orange-400 mb-6 tracking-tight">
+              Join the Vision
+            </h1>
+            <p className="text-lg lg:text-xl text-slate-600 dark:text-slate-400 font-medium leading-relaxed">
+              Create an account in seconds and take full control of your Meta Glasses reviews.
+            </p>
           </div>
-          <h1 className="text-5xl lg:text-6xl font-extrabold text-transparent bg-clip-text bg-gradient-to-l from-pink-600 via-amber-500 to-orange-500 dark:from-pink-400 dark:via-amber-400 dark:to-orange-400 mb-6 tracking-tight">
-            Join the Vision
-          </h1>
-          <p className="text-lg lg:text-xl text-slate-600 dark:text-slate-400 font-medium leading-relaxed">
-            Create an account in seconds and take full control of your Meta Glasses reviews.
-          </p>
         </div>
-      </div>
       
       {/* Left Panel - Form */}
       <div className="w-full lg:w-1/2 flex items-center justify-center p-6 sm:p-12 relative z-10">
@@ -232,6 +235,7 @@ const Register = () => {
         </div>
       </div>
     </div>
+    </>
   );
 };
 
