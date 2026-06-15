@@ -73,7 +73,10 @@ const Sidebar = () => {
       {/* Bottom Action */}
       <Box className="p-4 border-t border-slate-200 dark:border-slate-800">
         <ListItem disablePadding>
-          <ListItemButton className="rounded-xl text-slate-600 dark:text-slate-400 hover:bg-red-50 dark:hover:bg-red-500/10 hover:text-red-600 dark:hover:text-red-400 transition-colors">
+          <ListItemButton 
+            onClick={() => dispatch({ type: 'auth/logout' })}
+            className="rounded-xl text-slate-600 dark:text-slate-400 hover:bg-red-50 dark:hover:bg-red-500/10 hover:text-red-600 dark:hover:text-red-400 transition-colors"
+          >
             <ListItemIcon className="min-w-[40px] text-inherit">
               <LogoutRounded />
             </ListItemIcon>

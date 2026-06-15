@@ -2,12 +2,17 @@ import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-d
 import { useSelector } from 'react-redux';
 import { ThemeProvider, createTheme, CssBaseline } from '@mui/material';
 import { useEffect, useMemo } from 'react';
+import { Toaster } from 'react-hot-toast';
 import AdminLayout from './components/layout/AdminLayout';
+import ProtectedRoute from './components/routes/ProtectedRoute';
+import Login from './pages/Login';
+import Register from './pages/Register';
+import Users from './pages/Users';
 
-// Placeholders
-const Login = () => <div className="p-8 text-center text-2xl dark:text-white">Login Page Placeholder</div>;
-const Register = () => <div className="p-8 text-center text-2xl dark:text-white">Register Page Placeholder</div>;
+// Placeholders for inner pages
 const Dashboard = () => <div className="p-8 text-center text-2xl dark:text-white">Dashboard Content Placeholder</div>;
+const Profile = () => <div className="p-8 text-center text-2xl dark:text-white">Profile Content Placeholder</div>;
+const Settings = () => <div className="p-8 text-center text-2xl dark:text-white">Settings Content Placeholder</div>;
 
 function App() {
   const mode = useSelector((state) => state.ui.mode);
@@ -69,6 +74,22 @@ function App() {
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
+      <Toaster 
+        position="top-right" 
+        toastOptions={{
+          className: 'glass dark:bg-slate-800 dark:text-white',
+          style: {
+            backdropFilter: 'blur(10px)',
+            background: mode === 'dark' ? 'rgba(30, 41, 59, 0.9)' : 'rgba(255, 255, 255, 0.9)',
+            color: mode === 'dark' ? '#fff' : '#1e293b',
+            boxShadow: '0 4px 30px rgba(0, 0, 0, 0.1)',
+            borderRadius: '16px',
+            border: mode === 'dark' ? '1px solid rgba(255,255,255,0.1)' : '1px solid rgba(0,0,0,0.05)',
+          },
+          success: { iconTheme: { primary: '#10b981', secondary: '#fff' } },
+          error: { iconTheme: { primary: '#ef4444', secondary: '#fff' } },
+        }} 
+      />
       <Router>
         <Routes>
           {/* Public Routes */}
@@ -76,10 +97,16 @@ function App() {
           <Route path="/register" element={<Register />} />
           
           {/* Protected Routes inside Layout */}
-          <Route path="/" element={<AdminLayout />}>
+          <Route path="/" element={<ProtectedRoute><AdminLayout /></ProtectedRoute>}>
             <Route index element={<Navigate to="/dashboard" replace />} />
             <Route path="dashboard" element={<Dashboard />} />
+            <Route path="users" element={<Users />} />
+            <Route path="profile" element={<Profile />} />
+            <Route path="settings" element={<Settings />} />
           </Route>
+          
+          {/* Fallback */}
+          <Route path="*" element={<Navigate to="/dashboard" replace />} />
         </Routes>
       </Router>
     </ThemeProvider>
