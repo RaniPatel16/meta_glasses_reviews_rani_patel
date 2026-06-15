@@ -2,6 +2,10 @@ import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchReviews, setSelectedReview } from '../store/slices/reviewsSlice';
 import ReviewTable from '../components/reviews/ReviewTable';
+import AddReviewModal from '../components/reviews/AddReviewModal';
+import EditReviewModal from '../components/reviews/EditReviewModal';
+import DeleteReviewModal from '../components/reviews/DeleteReviewModal';
+import ViewReviewModal from '../components/reviews/ViewReviewModal';
 import { Button, Pagination, TextField, InputAdornment, MenuItem } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 import SearchIcon from '@mui/icons-material/Search';
@@ -13,6 +17,11 @@ const ReviewsData = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [page, setPage] = useState(1);
   const [ratingFilter, setRatingFilter] = useState('all');
+
+  const [isAddOpen, setIsAddOpen] = useState(false);
+  const [isEditOpen, setIsEditOpen] = useState(false);
+  const [isDeleteOpen, setIsDeleteOpen] = useState(false);
+  const [isViewOpen, setIsViewOpen] = useState(false);
 
   useEffect(() => {
     const delayDebounceFn = setTimeout(() => {
@@ -31,23 +40,22 @@ const ReviewsData = () => {
   };
 
   const handleAddClick = () => {
-    // Will open Add Modal in Step 3
-    console.log('Add review modal');
+    setIsAddOpen(true);
   };
 
   const handleEditClick = (review) => {
     dispatch(setSelectedReview(review));
-    // Will open Edit Modal in Step 3
+    setIsEditOpen(true);
   };
 
   const handleDeleteClick = (review) => {
     dispatch(setSelectedReview(review));
-    // Will open Delete Modal in Step 3
+    setIsDeleteOpen(true);
   };
 
   const handleViewClick = (review) => {
     dispatch(setSelectedReview(review));
-    // Will open View Modal in Step 3
+    setIsViewOpen(true);
   };
 
   return (
@@ -146,6 +154,12 @@ const ReviewsData = () => {
           />
         </div>
       )}
+
+      {/* Modals */}
+      <AddReviewModal open={isAddOpen} onClose={() => setIsAddOpen(false)} />
+      {isEditOpen && <EditReviewModal open={isEditOpen} onClose={() => setIsEditOpen(false)} />}
+      <DeleteReviewModal open={isDeleteOpen} onClose={() => setIsDeleteOpen(false)} />
+      {isViewOpen && <ViewReviewModal open={isViewOpen} onClose={() => setIsViewOpen(false)} />}
     </div>
   );
 };
