@@ -18,7 +18,7 @@ const Login = () => {
   const { loading, error, token } = useSelector((state) => state.auth);
   const [showPassword, setShowPassword] = useState(false);
 
-  const from = location.state?.from?.pathname || '/dashboard';
+  const from = '/dashboard'; // User requested to always open dashboard on sign in
 
   useEffect(() => {
     dispatch(clearAuthError());
