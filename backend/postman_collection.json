@@ -1,37 +1,221 @@
 {
   "info": {
     "name": "Meta Glasses Reviews API",
-    "description": "Postman Collection for Meta Glasses Reviews Full Stack Project",
+    "description": "Complete Postman Documentation for the Full Stack Meta Glasses Reviews Project. Includes Auth, Users, Reviews, and Advanced Aggregation Stats.",
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
   },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:5000",
+      "type": "string"
+    },
+    {
+      "key": "token",
+      "value": "YOUR_JWT_TOKEN_HERE",
+      "type": "string"
+    }
+  ],
   "item": [
     {
-      "name": "Users",
+      "name": "1. Authentication",
       "item": [
         {
-          "name": "Get All Users",
+          "name": "Register User",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Test User\",\n  \"email\": \"test@example.com\",\n  \"password\": \"password123\",\n  \"role\": \"user\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/auth/register",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "auth", "register"]
+            }
+          }
+        },
+        {
+          "name": "Login User",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"test@example.com\",\n  \"password\": \"password123\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/auth/login",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "auth", "login"]
+            }
+          }
+        },
+        {
+          "name": "Get Current Profile (Me)",
           "request": {
             "method": "GET",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
             "url": {
-              "raw": "{{baseUrl}}/api/v1/users",
+              "raw": "{{baseUrl}}/api/v1/auth/me",
               "host": ["{{baseUrl}}"],
-              "path": ["api", "v1", "users"]
+              "path": ["api", "v1", "auth", "me"]
             }
           }
         }
       ]
     },
     {
-      "name": "Reviews",
+      "name": "2. Reviews (CRUD & Search)",
       "item": [
         {
-          "name": "Get All Reviews",
+          "name": "Get All Reviews (With Pagination/Filters)",
           "request": {
             "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/reviews?page=1&limit=10&rating=5",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "reviews"],
+              "query": [
+                { "key": "page", "value": "1" },
+                { "key": "limit", "value": "10" },
+                { "key": "rating", "value": "5" }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get Single Review",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/reviews/REVIEW_ID_HERE",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "reviews", "REVIEW_ID_HERE"]
+            }
+          }
+        },
+        {
+          "name": "Create Review",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{token}}" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"John Doe\",\n  \"title\": \"Great Glasses!\",\n  \"reviewText\": \"I love the Meta AI features.\",\n  \"rating\": 5,\n  \"country\": \"USA\",\n  \"verifiedPurchase\": true,\n  \"deviceName\": \"Wayfarer\"\n}"
+            },
             "url": {
               "raw": "{{baseUrl}}/api/v1/reviews",
               "host": ["{{baseUrl}}"],
               "path": ["api", "v1", "reviews"]
+            }
+          }
+        },
+        {
+          "name": "Update Review",
+          "request": {
+            "method": "PUT",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{token}}" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Updated Title\",\n  \"rating\": 4\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/reviews/REVIEW_ID_HERE",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "reviews", "REVIEW_ID_HERE"]
+            }
+          }
+        },
+        {
+          "name": "Delete Review",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/reviews/REVIEW_ID_HERE",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "reviews", "REVIEW_ID_HERE"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "3. Analytics & Aggregations",
+      "item": [
+        {
+          "name": "Get Average Rating",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/reviews/stats/average-rating",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "reviews", "stats", "average-rating"]
+            }
+          }
+        },
+        {
+          "name": "Get Top Reviewers",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/reviews/stats/top-reviewers?limit=5",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "reviews", "stats", "top-reviewers"],
+              "query": [
+                { "key": "limit", "value": "5" }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get Positive Reviews Count",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/reviews/stats/positive-reviews",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "reviews", "stats", "positive-reviews"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "4. Users Management",
+      "item": [
+        {
+          "name": "Get All Users",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/users",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "users"]
             }
           }
         }
