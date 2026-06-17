@@ -13,6 +13,7 @@
 | 💻 GitHub Repository | [meta_glasses_reviews_rani_patel](https://github.com/RaniPatel16/meta_glasses_reviews_rani_patel) |
 | 📂 Dataset (Google Drive) | [Meta Glasses Reviews JSON](https://drive.google.com/file/d/1nQNBucieSkpd6ykgwNiqR0NCtKX5l6P1/view?usp=drive_link) |
 | 📘 Assignment Repo | [CGxSU Semester 1 – Assignment 05](https://github.com/RaniPatel16/CGxSU_Semester_1/tree/main/assignments/05.sem2_full_stack_80_Marks_Project_02) |
+| ⚡ Status | **FULLY INTEGRATED (Frontend + Backend + DB)** |
 
 ---
 
