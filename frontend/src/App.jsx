@@ -6,6 +6,7 @@ import { Toaster } from 'react-hot-toast';
 import AdminLayout from './components/layout/AdminLayout';
 import ProtectedRoute from './components/routes/ProtectedRoute';
 
+const Landing = lazy(() => import('./pages/Landing'));
 const Login = lazy(() => import('./pages/Login'));
 const Register = lazy(() => import('./pages/Register'));
 const Users = lazy(() => import('./pages/Users'));
@@ -98,21 +99,21 @@ function App() {
         }>
           <Routes>
             {/* Public Routes */}
+            <Route path="/" element={<Landing />} />
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
             
             {/* Protected Routes inside Layout */}
-            <Route path="/" element={<ProtectedRoute><AdminLayout /></ProtectedRoute>}>
-              <Route index element={<Navigate to="/dashboard" replace />} />
-              <Route path="dashboard" element={<Dashboard />} />
-              <Route path="users" element={<Users />} />
-              <Route path="reviews" element={<ReviewsData />} />
-              <Route path="profile" element={<Profile />} />
-              <Route path="settings" element={<Settings />} />
+            <Route element={<ProtectedRoute><AdminLayout /></ProtectedRoute>}>
+              <Route path="/dashboard" element={<Dashboard />} />
+              <Route path="/users" element={<Users />} />
+              <Route path="/reviews" element={<ReviewsData />} />
+              <Route path="/profile" element={<Profile />} />
+              <Route path="/settings" element={<Settings />} />
             </Route>
             
             {/* Fallback */}
-            <Route path="*" element={<Navigate to="/dashboard" replace />} />
+            <Route path="*" element={<Navigate to="/" replace />} />
           </Routes>
         </Suspense>
       </Router>
