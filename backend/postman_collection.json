@@ -98,9 +98,9 @@
             "method": "GET",
             "header": [],
             "url": {
-              "raw": "{{baseUrl}}/api/v1/reviews/REVIEW_ID_HERE",
+              "raw": "{{baseUrl}}/api/v1/reviews/6a0471d761cde619be8222c0",
               "host": ["{{baseUrl}}"],
-              "path": ["api", "v1", "reviews", "REVIEW_ID_HERE"]
+              "path": ["api", "v1", "reviews", "6a0471d761cde619be8222c0"]
             }
           }
         },
@@ -136,9 +136,9 @@
               "raw": "{\n  \"title\": \"Updated Title\",\n  \"rating\": 4\n}"
             },
             "url": {
-              "raw": "{{baseUrl}}/api/v1/reviews/REVIEW_ID_HERE",
+              "raw": "{{baseUrl}}/api/v1/reviews/6a0471d761cde619be8222c0",
               "host": ["{{baseUrl}}"],
-              "path": ["api", "v1", "reviews", "REVIEW_ID_HERE"]
+              "path": ["api", "v1", "reviews", "6a0471d761cde619be8222c0"]
             }
           }
         },
@@ -150,9 +150,9 @@
               { "key": "Authorization", "value": "Bearer {{token}}" }
             ],
             "url": {
-              "raw": "{{baseUrl}}/api/v1/reviews/REVIEW_ID_HERE",
+              "raw": "{{baseUrl}}/api/v1/reviews/6a0471d761cde619be8222c0",
               "host": ["{{baseUrl}}"],
-              "path": ["api", "v1", "reviews", "REVIEW_ID_HERE"]
+              "path": ["api", "v1", "reviews", "6a0471d761cde619be8222c0"]
             }
           }
         }
